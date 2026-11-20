@@ -109,11 +109,11 @@ SOURCES = {
         "kind": "pdf_full",
         "discipline": "Legislação Interna do TJSP",
         "minimum": 1,
-        "updated": "Inteiro teor compilado disponibilizado pelo TJSP",
+        "updated": "Compilação oficial do GCN/e-SAJ em 25/04/2022, com a alteração da Resolução TJSP nº 864/2022",
     },
     "regimento": {
         "title": "Regimento Interno do Tribunal de Justiça de São Paulo",
-        "url": "https://www.tjsp.jus.br/Download/Portal/Biblioteca/Biblioteca/Legislacao/RegimentoInternoTJSP.pdf?d=1789151057606",
+        "url": "https://www.tjsp.jus.br/Download/Portal/Biblioteca/Biblioteca/Legislacao/RegimentoInternoTJSP.pdf?d=1788453606810",
         "kind": "pdf_full",
         "discipline": "Legislação Interna do TJSP",
         "minimum": 1,
@@ -131,7 +131,7 @@ SOURCES = {
 }
 
 ARTICLE_RE = re.compile(
-    r"^\s*Art(?:igo)?\.?\s*(\d{1,4})\s*(?:[º°ªo]\s*)?(?:[-–]\s*([A-Za-z]))?(?=$|[\s.:;])",
+    r"^\s*Art(?:igo)?\.?\s*(\d{1,3}(?:\.\d{3})?|\d{1,4})\s*(?:[º°ªo]\s*)?(?:[-–]\s*([A-Za-z]))?(?=$|[\s.:;])",
     re.IGNORECASE,
 )
 
@@ -192,7 +192,7 @@ def parse_articles(text):
                 body_lines[0] = re.sub(r"^\s*[-–.:]\s*", "", body_lines[0])
                 current["body"] = "\n".join(body_lines).strip()
                 records.append(current)
-            number = int(match.group(1))
+            number = int(match.group(1).replace('.', ''))
             suffix = (match.group(2) or "").upper()
             label = f"Art. {number}" + (f"-{suffix}" if suffix else "")
             current = {"number": number, "suffix": suffix, "label": label, "_lines": [line]}
@@ -223,13 +223,13 @@ def extract_html_articles(spec, content):
     return selected
 
 def build_document(key, spec):
-    raw, content_type = download(spec["url"])
+    raw, content_type = download(spec.get("download_url", spec["url"]))
     kind = spec["kind"]
     base = {
         "id": key,
         "title": spec["title"],
         "discipline": spec["discipline"],
-        "source": spec["url"],
+        "source": spec.get("official_url", spec["url"]),
         "updated": spec["updated"],
     }
     if kind in ("html", "html_full"):

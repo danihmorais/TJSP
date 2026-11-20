@@ -234,7 +234,9 @@ applySearch=function(){
  document.querySelectorAll(".group-section").forEach(g=>g.hidden=!Array.from(g.querySelectorAll(".document")).some(d=>!d.hidden));
  $("#count").textContent=q?articlesFound+" artigo(s) encontrados em "+docsFound+" diploma(s)":docs.length+" diplomas em 6 agrupamentos";
 };
+let lastPrintSearch=null;
 function printSelection(type,id){
+ lastPrintSearch=$("#search").value;$("#search").value="";applySearch();
  document.body.classList.remove("print-mode","print-doc");
  document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));
  if(type==="all"){window.print();return;}
@@ -252,7 +254,7 @@ function printSelection(type,id){
 document.querySelector("#documents").addEventListener("click",event=>{
  const btn=event.target.closest("[data-print]");if(btn)printSelection(btn.dataset.print,btn.dataset.target);
 });
-window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));if(lastPrintSearch!==null){$("#search").value=lastPrintSearch;lastPrintSearch=null;applySearch();}});
 </script>
 
 </body>

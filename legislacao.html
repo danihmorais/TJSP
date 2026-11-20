@@ -91,8 +91,8 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
  body.print-mode .group-section{display:none!important}
  body.print-mode .group-section.print-target{display:block!important}
  body.print-mode .group-section.print-target .document{display:block!important}
- body.print-mode.print-doc .group-section.print-target .document{display:none!important}
- body.print-mode.print-doc .document.print-target{display:block!important}
+ body.print-mode.print-doc .group-section.print-target .document:not(.print-target){display:none!important}
+ body.print-mode.print-doc .group-section.print-target .document.print-target{display:block!important}
  body.print-mode.print-doc .group-header{display:none!important}
 }
 .transcription-note{margin:0 0 11px;padding:8px 10px;background:#fff7e9;border-left:3px solid #b88b49;color:#6b5431;font-size:10px}

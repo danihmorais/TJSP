@@ -1,32 +1,36 @@
 # TJSP — Bloco II (Direito)
 
-Site de consulta para o programa jurídico do edital do Tribunal de Justiça de São Paulo.
+Apostila de legislação do conteúdo programático do concurso do Tribunal de Justiça de São Paulo.
 
-## Apostila de legislação compilada
+## Legislação compilada
 
-A página principal de leitura é **[legislacao.html](legislacao.html)**. Ela apresenta o texto dos dispositivos previstos no edital, em sequência, por diploma, com busca por artigo/expressão e impressão em formato A4.
+A página **[legislacao.html](legislacao.html)** é a apostila principal. Os diplomas são agrupados conforme as seis disciplinas do edital:
 
-A apostila é gerada automaticamente no workflow de publicação a partir de fontes oficiais:
-- Códigos Penal, de Processo Penal e de Processo Civil e Constituição Federal — Planalto.
-- Leis federais nº 8.429/1992, 9.099/1995 e 12.153/2009 — Planalto.
-- Lei estadual nº 10.261/1968 e LC estadual nº 1.111/2010 — ALESP.
-- Resoluções, Regimento Interno e Normas da Corregedoria — TJSP.
+1. Direito Penal.
+2. Direito Processual Penal.
+3. Direito Processual Civil.
+4. Direito Constitucional.
+5. Direito Administrativo.
+6. Legislação Interna.
 
-O compilador conserva somente os recortes previstos no programa para os códigos e leis em que o edital delimitou artigos. Atos indicados sem recorte de artigos são disponibilizados em inteiro teor. A Resolução TJSP nº 963/2025 continua vinculada ao seu inteiro teor oficial no sistema GCN/e-SAJ, porque a página de consulta é entregue como aplicação JavaScript e não como arquivo estático.
+A Lei nº 9.099/1995 é apresentada em dois recortes, dentro de suas disciplinas: arts. 3º a 19 em Direito Processual Civil; arts. 60 a 83, 88 e 89 em Direito Processual Penal.
+
+## Leitura e impressão
+
+- Imprimir a apostila inteira.
+- Imprimir um agrupamento completo (por exemplo, apenas Direito Administrativo).
+- Imprimir um diploma individual (por exemplo, somente o Código Penal).
+- Pesquisar artigos, expressões e texto dos diplomas.
+- Preservar, quando a fonte é HTML, a marcação original de parágrafos, listas, links, destaques e notas. Em PDFs, recompõe-se a hierarquia de títulos e dispositivos para leitura.
+
+## Fontes e atualização
+
+O workflow baixa e compila as fontes oficiais a cada publicação, gerando `data/legislacao.json`. Os códigos e leis com recorte são limitados aos dispositivos indicados no edital. Os atos indicados sem intervalo são incluídos em inteiro teor ou nos recortes expressos do edital.
 
 ## Apoio de revisão
 
-A página **[index.html](index.html)** mantém sumário temático, sínteses, busca por assunto e marcação de tópicos revisados. É material secundário de apoio e não substitui a apostila legal.
-
-## Atualização e fidelidade
-
-A geração baixa as fontes oficiais novamente a cada publicação. O script remove versões expressamente riscadas em HTML quando a marcação de revogação está disponível. Em PDFs oficiais, mantém o conteúdo extraído do documento. Confira sempre a publicação original, notas de alteração, vigência e eventuais retificações antes da prova.
+A página **[index.html](index.html)** oferece sumário temático e sínteses para revisão. Ela é complementar à apostila e não substitui o texto legal.
 
 ## Publicação
 
-O workflow `.github/workflows/pages.yml`:
-1. baixa e compila os textos oficiais;
-2. gera `data/legislacao.json`;
-3. publica a página e os dados no GitHub Pages.
-
-Em **Settings → Pages → Build and deployment**, a origem deve estar configurada como **GitHub Actions**.
+O workflow `.github/workflows/pages.yml` compila os diplomas, valida a extração em pull requests e publica no GitHub Pages após push na `main`. Em **Settings → Pages → Build and deployment**, a origem deve estar configurada como **GitHub Actions**.

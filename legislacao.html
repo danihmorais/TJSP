@@ -56,6 +56,44 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
  .external{border:0;padding:0;background:#fff}
  a{color:#000;text-decoration:none}
 }
+
+.group-section{margin:0 0 24px;scroll-margin-top:12px}
+.group-header{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#e5ebf0;border:1px solid #cbd5dd;border-left:5px solid #234e6d;border-radius:7px;padding:12px 15px;margin:0 0 10px}
+.group-index{display:block;color:#687d8d;font-size:9px;letter-spacing:.13em;text-transform:uppercase;font-weight:800}
+.group-header h2{font-size:18px;line-height:1.25;margin:2px 0 0;color:#18364e}
+.group-print,.doc-print{border:1px solid #b8c6d0;background:#fff;color:#284a63;border-radius:5px;padding:7px 10px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}
+.doc-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.toc-group{margin-bottom:8px}.toc-group>a{display:block;color:#183e5c;text-decoration:none;font-size:12px;font-weight:800;padding:6px 7px;border-radius:5px}.toc-docs{padding:2px 0 0 11px;display:grid;gap:2px}.toc-docs a{font-size:11px;color:#4b5e6d;text-decoration:none;padding:4px 6px;border-left:2px solid #e3e8ec}.toc-docs a:hover{color:#16527d;border-color:#8ba9bf}
+.article{padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid #edf0f2}
+.article:last-child{border-bottom:0}
+.legal-source{font:13px/1.58 Arial,Helvetica,sans-serif;color:#202830}
+.legal-source p{margin:.35em 0 .55em;text-align:justify}
+.legal-source p[align=JUSTIFY],.legal-source p[align=justify]{text-align:justify}
+.legal-source p[align=CENTER],.legal-source p[align=center]{text-align:center}
+.legal-source h1,.legal-source h2,.legal-source h3,.legal-source h4{text-align:center;text-transform:uppercase;font-size:13px;margin:1em 0 .55em}
+.legal-source ol,.legal-source ul{padding-left:2em;margin:.35em 0 .6em}.legal-source li{margin:.25em 0}
+.legal-source table{border-collapse:collapse;max-width:100%;margin:.5em 0}.legal-source td,.legal-source th{border:1px solid #9da9b2;padding:4px 6px;vertical-align:top}
+.legal-line{margin:0 0 .45em;white-space:pre-wrap}.legal-line.heading{text-align:center;text-transform:uppercase;font-weight:700;margin:1em 0 .55em}.legal-line.article-line{font-weight:700;margin-top:.6em}.legal-line.paragraph{padding-left:1.5em}.legal-line.subitem{padding-left:2em}.legal-line.alinea{padding-left:3em}
+@media(max-width:600px){.group-header{align-items:flex-start}.group-header h2{font-size:16px}.doc-title-row{align-items:flex-start}.toc-group{width:100%}}
+@media print{
+ .group-print,.doc-print{display:none!important}
+ .group-section{break-before:page;margin-bottom:0}
+ .group-section:first-child{break-before:auto}
+ .group-header{background:#fff;border:0;border-bottom:1pt solid #333;border-left:3pt solid #333;border-radius:0;padding:0 0 4mm;margin:0 0 5mm}
+ .group-header h2{font-size:15pt;color:#000}
+ .document{border:0;border-radius:0;margin:0 0 7mm;overflow:visible;break-inside:auto}
+ .doc-head{background:#fff;border:0;padding:0 0 3mm;break-after:avoid}
+ .doc-head h2{font-size:13pt;color:#000}
+ .doc-body{padding:3mm 0 0}
+ .article{border:0;margin:0 0 3.5mm;padding:0;break-inside:avoid}
+ .legal-source,.full-text{font:10.5pt/1.4 Arial,Helvetica,sans-serif}
+ .legal-source p{margin:.25em 0 .45em}
+ body.print-mode .subject,body.print-mode .document{display:none!important}
+ body.print-mode .group-section.print-target{display:block!important}
+ body.print-mode.print-doc .group-section.print-target .document{display:none!important}
+ body.print-mode.print-doc .document.print-target{display:block!important}
+ body.print-mode.print-doc .group-header{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -133,5 +171,90 @@ $("#clear").addEventListener("click",()=>{$("#search").value="";applySearch();})
 $("#print").addEventListener("click",()=>window.print());
 load();
 </script>
+
+<script>
+const legalGroups=[
+ {id:"penal",index:"01",title:"DIREITO PENAL",items:["cp"]},
+ {id:"processo-penal",index:"02",title:"DIREITO PROCESSUAL PENAL",items:["cpp","jec_criminal"]},
+ {id:"processo-civil",index:"03",title:"DIREITO PROCESSUAL CIVIL",items:["cpc","jec_civil","jefaz"]},
+ {id:"constitucional",index:"04",title:"DIREITO CONSTITUCIONAL",items:["cf"]},
+ {id:"administrativo",index:"05",title:"DIREITO ADMINISTRATIVO",items:["estatuto","lia"]},
+ {id:"interna",index:"06",title:"LEGISLAÇÃO INTERNA",items:["res850","res963","lc1111","regimento","nscgj"]}
+];
+function legalTextMarkup(value){
+ return String(value||"").split(/\r?\n/).map(line=>{
+  const t=line.trim();if(!t)return "";
+  let cls="legal-line";
+  if(/^(PARTE|LIVRO|TÍTULO|TITULO|CAPÍTULO|CAPITULO|SEÇÃO|SECAO|SUBSEÇÃO|SUBSECAO)\b/i.test(t))cls+=" heading";
+  else if(/^Art(?:igo)?\.?\s*\d/i.test(t))cls+=" article-line";
+  else if(/^(?:§|Parágrafo único)/i.test(t))cls+=" paragraph";
+  else if(/^(?:[IVXLCDM]+|[0-9]+)\s*[-–.)]/.test(t))cls+=" subitem";
+  else if(/^[a-z]\s*[\])]/i.test(t))cls+=" alinea";
+  return '<p class="'+cls+'">'+esc(t)+'</p>';
+ }).join("");
+}
+articleHtml=function(a){
+ const label=a.label||("Art. "+a.number+(a.suffix?"-"+a.suffix:""));
+ const markup=a.html?'<div class="legal-source">'+a.html+'</div>':'<div class="article-text">'+legalTextMarkup(a.body)+'</div>';
+ return '<article class="article" data-search="'+esc(norm(label+" "+a.body))+'">'+markup+'</article>';
+};
+docHtml=function(d){
+ const source='<a target="_blank" rel="noopener noreferrer" href="'+esc(d.source)+'">Abrir fonte oficial ↗</a>';
+ const title='<header class="doc-head"><div class="doc-title-row"><h2>'+esc(d.title)+'</h2><button class="doc-print" type="button" data-print="doc" data-target="'+esc(d.id)+'">Imprimir este diploma</button></div><div class="doc-meta"><span>'+esc(d.updated||"Fonte oficial")+'</span><span>'+source+'</span></div></header>';
+ let body="";
+ if(d.fullHtml)body='<div class="doc-body"><div class="legal-source">'+d.fullHtml+'</div></div>';
+ else if(d.fullText)body='<div class="doc-body"><div class="full-text">'+legalTextMarkup(d.fullText)+'</div></div>';
+ else body='<div class="doc-body">'+(d.articles||[]).map(articleHtml).join("")+'</div>';
+ const note=d.transcriptionNote?'<div class="doc-body"><div class="external">'+esc(d.transcriptionNote)+'</div></div>':"";
+ return '<section class="document" id="doc-'+esc(d.id)+'" data-doc="'+esc(d.id)+'">'+title+note+body+'</section>';
+};
+render=function(){
+ const byId=new Map(docs.map(d=>[d.id,d]));
+ $("#toc").innerHTML=legalGroups.map(g=>'<div class="toc-group"><a href="#group-'+g.id+'">'+g.index+'. '+esc(g.title)+'</a><div class="toc-docs">'+g.items.map(id=>byId.has(id)?'<a href="#doc-'+id+'">'+esc(byId.get(id).title)+'</a>':"").join("")+'</div></div>').join("");
+ $("#documents").innerHTML=legalGroups.map(g=>{
+  const items=g.items.map(id=>byId.get(id)).filter(Boolean);
+  return '<section class="group-section" id="group-'+g.id+'" data-group="'+g.id+'"><header class="group-header"><div><span class="group-index">AGRUPAMENTO '+g.index+'</span><h2>'+esc(g.title)+'</h2></div><button class="group-print" type="button" data-print="group" data-target="'+g.id+'">Imprimir agrupamento</button></header>'+items.map(docHtml).join("")+'</section>';
+ }).join("");
+ applySearch();
+};
+applySearch=function(){
+ const q=norm($("#search").value.trim());let docsFound=0,articlesFound=0;
+ document.querySelectorAll(".document").forEach(sec=>{
+  let matched=false;const articles=sec.querySelectorAll(".article");
+  if(articles.length){
+   articles.forEach(a=>{const ok=!q||norm(a.dataset.search).includes(q);a.hidden=!ok;if(ok){matched=true;articlesFound++;}});
+  }else{
+   const body=sec.querySelector(".full-text,.legal-source,.external");
+   const ok=!q||(body&&norm(body.textContent).includes(q));
+   if(body)body.hidden=!ok;matched=!!ok;
+  }
+  sec.hidden=!matched;if(matched)docsFound++;
+ });
+ document.querySelectorAll(".group-section").forEach(g=>g.hidden=!Array.from(g.querySelectorAll(".document")).some(d=>!d.hidden));
+ $("#count").textContent=q?articlesFound+" artigo(s) encontrados em "+docsFound+" diploma(s)":docs.length+" diplomas em 6 agrupamentos";
+};
+function printSelection(type,id){
+ document.body.classList.remove("print-mode","print-doc");
+ document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));
+ if(type==="all"){window.print();return;}
+ document.body.classList.add("print-mode");
+ if(type==="group"){
+  const group=document.querySelector('.group-section[data-group="'+CSS.escape(id)+'"]');
+  if(group)group.classList.add("print-target");
+ }else{
+  const doc=document.querySelector('.document[data-doc="'+CSS.escape(id)+'"]');
+  const group=doc&&doc.closest(".group-section");
+  if(doc&&group){group.classList.add("print-target");doc.classList.add("print-target");document.body.classList.add("print-doc");}
+ }
+ setTimeout(()=>window.print(),80);
+}
+document.querySelector("#documents").addEventListener("click",event=>{
+ const btn=event.target.closest("[data-print]");if(btn)printSelection(btn.dataset.print,btn.dataset.target);
+});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));});
+const allButton=document.querySelector("#print");
+if(allButton)allButton.addEventListener("click",()=>printSelection("all",""));
+</script>
+
 </body>
 </html>

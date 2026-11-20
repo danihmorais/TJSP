@@ -22,6 +22,7 @@ SOURCES = {
         "ranges": [(293, 305), (312, 317), (319, 333), (339, 347)],
         "exact": [(307, ""), (308, ""), (311, "A"), (336, ""), (337, ""), (357, ""), (359, "")],
         "discipline": "Direito Penal",
+        "group": "penal",
         "minimum": 35,
         "updated": "Texto compilado oficial do Planalto",
     },
@@ -32,6 +33,7 @@ SOURCES = {
         "ranges": [(251, 258), (261, 267), (351, 372), (394, 497), (531, 538), (541, 548), (574, 667)],
         "exact": [(274, "")],
         "discipline": "Direito Processual Penal",
+        "group": "processo-penal",
         "minimum": 180,
         "updated": "Texto compilado oficial do Planalto",
     },
@@ -42,6 +44,7 @@ SOURCES = {
         "ranges": [(144, 155), (188, 275), (294, 311), (318, 538), (994, 1026)],
         "exact": [],
         "discipline": "Direito Processual Civil",
+        "group": "processo-civil",
         "minimum": 300,
         "updated": "Texto compilado oficial do Planalto",
     },
@@ -52,6 +55,7 @@ SOURCES = {
         "ranges": [(5, 17), (37, 41)],
         "exact": [(92, "")],
         "discipline": "Direito Constitucional",
+        "group": "constitucional",
         "minimum": 18,
         "updated": "Texto compilado oficial do Planalto",
     },
@@ -62,6 +66,7 @@ SOURCES = {
         "ranges": [(1, 86), (171, 175), (239, 323)],
         "exact": [],
         "discipline": "Direito Administrativo",
+        "group": "administrativo",
         "minimum": 150,
         "updated": "Texto consolidado pela ALESP — última atualização indicada: Lei nº 18.473/2026",
     },
@@ -72,18 +77,31 @@ SOURCES = {
         "ranges": [(1, 23)],
         "exact": [],
         "discipline": "Direito Administrativo",
+        "group": "administrativo",
         "minimum": 15,
         "updated": "Texto compilado oficial do Planalto",
     },
-    "jec": {
-        "title": "Lei dos Juizados Especiais — Lei nº 9.099/1995",
+    "jec_civil": {
+        "title": "Lei nº 9.099/1995 — Juizados Especiais Cíveis",
         "url": "https://www.planalto.gov.br/ccivil_03/leis/l9099.htm",
         "kind": "html",
-        "ranges": [(3, 19), (60, 83)],
+        "ranges": [(3, 19)],
+        "exact": [],
+        "discipline": "Direito Processual Civil",
+        "group": "processo-civil",
+        "minimum": 15,
+        "updated": "Recorte dos arts. 3º a 19 — texto oficial do Planalto",
+    },
+    "jec_criminal": {
+        "title": "Lei nº 9.099/1995 — Juizados Especiais Criminais",
+        "url": "https://www.planalto.gov.br/ccivil_03/leis/l9099.htm",
+        "kind": "html",
+        "ranges": [(60, 83)],
         "exact": [(88, ""), (89, "")],
-        "discipline": "Direito Processual Civil e Penal",
-        "minimum": 35,
-        "updated": "Texto oficial do Planalto; redações revogadas/riscadas são descartadas",
+        "discipline": "Direito Processual Penal",
+        "group": "processo-penal",
+        "minimum": 20,
+        "updated": "Recorte dos arts. 60 a 83, 88 e 89 — texto oficial do Planalto",
     },
     "jefaz": {
         "title": "Juizados Especiais da Fazenda Pública — Lei nº 12.153/2009",
@@ -92,6 +110,7 @@ SOURCES = {
         "ranges": [(1, 27)],
         "exact": [],
         "discipline": "Direito Processual Civil",
+        "group": "processo-civil",
         "minimum": 20,
         "updated": "Texto oficial do Planalto",
     },
@@ -100,6 +119,7 @@ SOURCES = {
         "url": "https://www.al.sp.gov.br/repositorio/legislacao/lei.complementar/2010/compilacao-lei.complementar-1111-25.05.2010.html",
         "kind": "html_full",
         "discipline": "Legislação Interna do TJSP",
+        "group": "interna",
         "minimum": 1,
         "updated": "Texto consolidado pela ALESP — última atualização indicada: LC nº 1.441/2026",
     },
@@ -109,6 +129,7 @@ SOURCES = {
         "official_url": "https://esaj.tjsp.jus.br/gcn-frontend-vue/legislacao/find/229313",
         "kind": "html_block",
         "discipline": "Legislação Interna do TJSP",
+        "group": "interna",
         "minimum": 40,
         "updated": "Compilação secundária de 19/10/2026; fonte primária oficial vinculada ao GCN/e-SAJ",
     },
@@ -118,6 +139,7 @@ SOURCES = {
         "download_url": "https://api.tjsp.jus.br/Handlers/Handler/FileFetch.ashx?codigo=122776",
         "kind": "pdf_full",
         "discipline": "Legislação Interna do TJSP",
+        "group": "interna",
         "minimum": 1,
         "updated": "Compilação oficial do GCN/e-SAJ em 25/04/2022, com a alteração da Resolução TJSP nº 864/2022",
     },
@@ -126,6 +148,7 @@ SOURCES = {
         "url": "https://www.tjsp.jus.br/Download/Portal/Biblioteca/Biblioteca/Legislacao/RegimentoInternoTJSP.pdf?d=1788453606810",
         "kind": "pdf_full",
         "discipline": "Legislação Interna do TJSP",
+        "group": "interna",
         "minimum": 1,
         "updated": "PDF oficial atualizado em 12/11/2026",
     },
@@ -135,6 +158,7 @@ SOURCES = {
         "kind": "pdf_ranges",
         "ranges": [(5, 18), (26, 29), (46, 99), (103, 189), (1189, 1289)],
         "discipline": "Legislação Interna do TJSP",
+        "group": "interna",
         "minimum": 80,
         "updated": "PDF oficial atualizado em 22/10/2026; recortes por artigos correspondentes às seções indicadas no edital",
     },
@@ -158,9 +182,9 @@ def clean_lines(text):
             lines.append(line)
     return lines
 
-def html_lines(content):
+def parse_soup(content):
     soup = BeautifulSoup(content, "html.parser")
-    for node in soup(["script", "style", "noscript", "svg", "nav", "footer"]):
+    for node in soup(["script", "style", "noscript", "svg", "nav", "footer", "header"]):
         node.decompose()
     for node in soup.find_all(["del", "s", "strike"]):
         node.decompose()
@@ -168,6 +192,10 @@ def html_lines(content):
         style = (node.get("style") or "").lower().replace(" ", "")
         if "line-through" in style:
             node.decompose()
+    return soup
+
+def html_lines(content):
+    soup = parse_soup(content)
     raw_lines = clean_lines(soup.get_text("\n", strip=True))
     lines = []
     i = 0
@@ -180,6 +208,76 @@ def html_lines(content):
         lines.append(line)
         i += 1
     return lines
+
+ALLOWED_TAGS = {
+    "p", "div", "span", "strong", "b", "em", "i", "u", "sup", "sub",
+    "a", "br", "ol", "ul", "li", "table", "thead", "tbody", "tr", "td",
+    "th", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote"
+}
+
+def clean_fragment(node):
+    fragment = BeautifulSoup(str(node), "html.parser")
+    for element in fragment.find_all(True):
+        if element.name not in ALLOWED_TAGS:
+            element.unwrap()
+            continue
+        kept = {}
+        if element.name == "a" and element.get("href", "").startswith(("https://", "http://", "#")):
+            kept["href"] = element["href"]
+        if element.name in {"p", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6"}:
+            align = element.get("align", "").lower()
+            if align in {"left", "right", "center", "justify"}:
+                kept["align"] = align
+        element.attrs = kept
+    return str(fragment)
+
+def legal_blocks(content):
+    soup = parse_soup(content)
+    root = soup.body or soup
+    candidates = root.find_all(["p", "h1", "h2", "h3", "h4", "h5", "h6"])
+    blocks = []
+    for node in candidates:
+        text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
+        if not text:
+            continue
+        blocks.append({
+            "text": text,
+            "html": clean_fragment(node),
+            "isArticle": bool(ARTICLE_RE.match(text)),
+        })
+    return blocks
+
+def extract_html_articles(spec, content):
+    blocks = legal_blocks(content)
+    starts = [i for i, block in enumerate(blocks) if block["isArticle"]]
+    records = []
+    for position, start in enumerate(starts):
+        article_match = ARTICLE_RE.match(blocks[start]["text"])
+        number = int(article_match.group(1).replace(".", ""))
+        suffix = (article_match.group(2) or "").upper()
+        label = f"Art. {number}" + (f"-{suffix}" if suffix else "")
+        if not chosen({"number": number, "suffix": suffix}, spec):
+            continue
+        stop = starts[position + 1] if position + 1 < len(starts) else len(blocks)
+        section = blocks[start:stop]
+        body = "\n".join(block["text"] for block in section).strip()
+        html = "\n".join(block["html"] for block in section)
+        records.append({
+            "number": number,
+            "suffix": suffix,
+            "label": label,
+            "body": body,
+            "html": html,
+        })
+    if len(records) < spec.get("minimum", 1):
+        raise RuntimeError(
+            f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}.'
+        )
+    return records
+
+def extract_full_html(content):
+    blocks = legal_blocks(content)
+    return "\n".join(block["html"] for block in blocks)
 
 def pdf_text(content):
     reader = PdfReader(io.BytesIO(content))
@@ -239,6 +337,7 @@ def build_document(key, spec):
         "id": key,
         "title": spec["title"],
         "discipline": spec["discipline"],
+        "group": spec.get("group", "interna"),
         "source": spec.get("official_url", spec["url"]),
         "updated": spec["updated"],
     }
@@ -247,6 +346,7 @@ def build_document(key, spec):
         text = "\n".join(lines)
         if kind == "html_full":
             base["fullText"] = text
+            base["fullHtml"] = extract_full_html(raw)
             base["articles"] = parse_articles(text)
         else:
             base["articles"] = extract_html_articles(spec, raw)
@@ -255,6 +355,7 @@ def build_document(key, spec):
         if len(text) < 1000:
             raise RuntimeError(f'{spec["title"]}: extração de PDF vazia ou incompleta.')
         base["fullText"] = text
+        base["textFormat"] = "pdf-structured"
     elif kind == "html_block":
         lines = html_lines(raw)
         start = next((i for i, line in enumerate(lines) if "preâmbulo" in line.lower()), None)
@@ -268,6 +369,7 @@ def build_document(key, spec):
         if len(records) < spec.get("minimum", 1):
             raise RuntimeError(f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}.')
         base["fullText"] = text
+        base["textFormat"] = "pdf-structured"
         base["articles"] = records
         base["transcriptionNote"] = "Texto extraído de compilação secundária datada de 19/10/2026; fonte primária oficial do TJSP vinculada no GCN/e-SAJ."
     elif kind == "pdf_ranges":
@@ -279,6 +381,7 @@ def build_document(key, spec):
                 f'{spec["title"]}: extraídos {len(selected)} artigos; mínimo esperado {spec.get("minimum")}.'
             )
         base["articles"] = selected
+        base["textFormat"] = "pdf-structured"
     else:
         raise RuntimeError(f"Tipo de fonte desconhecido: {kind}")
     if not base.get("fullText") and not base.get("articles"):

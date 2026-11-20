@@ -33,7 +33,7 @@ jobs:
       - name: Compile the legislation from official sources
         run: python scripts/build_legislacao.py
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Upload site and compiled legal texts
         uses: actions/upload-pages-artifact@v4
         with:

@@ -441,12 +441,15 @@ def extract_html_articles(spec, content, blocks=None):
                 suffix = (match.group(2) or "").upper()
                 if str(number) in selected_numbers or not chosen({"number": number, "suffix": suffix}, spec):
                     continue
-                child_match = any(
-                    (child_match := ARTICLE_RE.match(re.sub(r"\\s+", " ", child.get_text(" ", strip=True)).strip()))
-                    and int(child_match.group(1).replace(".", "")) == number
-                    for child in node.find_all(True)
-                )
-                if child_match:
+                child_has_match = False
+                for child in node.find_all(True):
+                    descendant_match = ARTICLE_RE.match(
+                        re.sub(r"\\s+", " ", child.get_text(" ", strip=True)).strip()
+                    )
+                    if descendant_match and int(descendant_match.group(1).replace(".", "")) == number:
+                        child_has_match = True
+                        break
+                if child_has_match:
                     continue
                 parent = node.parent
                 parent_desc = parent.name if getattr(parent, "name", None) else "?"

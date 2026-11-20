@@ -31,6 +31,19 @@ class HtmlExtractionTests(unittest.TestCase):
         self.assertIn("(Redação dada pela Lei nº 1)", records[0]["body"])
         self.assertNotIn("Art. 3", [record["label"] for record in records])
 
+    def test_leaf_div_is_extracted_without_splitting_inline_markup(self):
+        source = """
+        <html><body>
+        <div class="artigo">Art. 25. Texto em <strong>bloco div</strong> da fonte.</div>
+        <div class="artigo">Art. 26. Próximo artigo.</div>
+        </body></html>
+        """
+        spec = {"title": "Teste", "minimum": 2, "ranges": [(25, 26)], "exact": []}
+        blocks = builder.legal_blocks(source, "teste")
+        records = builder.extract_html_articles(spec, source, blocks)
+        self.assertEqual([record["number"] for record in records], [25, 26])
+        self.assertIn("bloco div", records[0]["body"])
+
     def test_table_with_paragraph_is_emitted_once(self):
         source = "<html><body><table><tr><td><p>Texto único</p></td></tr></table></body></html>"
         blocks = builder.legal_blocks(source)

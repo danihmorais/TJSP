@@ -304,12 +304,17 @@ def node_lines(node):
 def legal_blocks(content, doc_id="documento"):
     soup = parse_soup(content)
     root = soup.body or soup
-    tags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table"]
+    tags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table", "div"]
     blocks = []
     seen = set()
     heading_number = 0
     for node in root.find_all(tags):
-        if node.find(tags):
+        if node.name == "div" and node.find_parent("table"):
+            continue
+        descendants = tags if node.name != "table" else [
+            "p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table"
+        ]
+        if node.find(descendants):
             continue
         text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
         if not text:

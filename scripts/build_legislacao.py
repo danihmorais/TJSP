@@ -158,8 +158,18 @@ def html_lines(content):
         style = (node.get("style") or "").lower().replace(" ", "")
         if "line-through" in style:
             node.decompose()
-    text = soup.get_text("\n", strip=True)
-    return clean_lines(text)
+    raw_lines = clean_lines(soup.get_text("\n", strip=True))
+    lines = []
+    i = 0
+    while i < len(raw_lines):
+        line = raw_lines[i]
+        if re.match(r"^Art(?:igo)?\.?\s*\d{1,4}$", line, re.IGNORECASE) and i + 1 < len(raw_lines):
+            if re.match(r"^(?:[º°ªo]\b|[-–]\s*[A-Za-z]\b)", raw_lines[i + 1], re.IGNORECASE):
+                line = line + " " + raw_lines[i + 1]
+                i += 1
+        lines.append(line)
+        i += 1
+    return lines
 
 def pdf_text(content):
     reader = PdfReader(io.BytesIO(content))

@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -16,10 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,12 +32,21 @@ jobs:
         run: python -m pip install --disable-pip-version-check beautifulsoup4 pypdf
       - name: Compile the legislation from official sources
         run: python scripts/build_legislacao.py
-      - name: Configure Pages
-        uses: actions/configure-pages@v6
       - name: Upload site and compiled legal texts
         uses: actions/upload-pages-artifact@v4
         with:
           path: .
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

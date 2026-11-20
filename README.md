@@ -32,3 +32,8 @@ A página **[index.html](index.html)** oferece sumário temático e sínteses pa
 ## Publicação
 
 O workflow `.github/workflows/pages.yml` compila os diplomas, valida a extração em pull requests e publica no GitHub Pages após push na `main`. Em **Settings → Pages → Build and deployment**, a origem deve estar configurada como **GitHub Actions**.
+
+
+## Geração de dados e testes
+
+O arquivo `data/legislacao.json` é versionado como fallback. O compilador atualiza cada fonte de forma independente; quando uma fonte falha, reaproveita a última versão disponível e sinaliza o diploma como desatualizado. O workflow executa `python -m unittest discover -s tests -v` antes da compilação e persiste o JSON atualizado na branch de origem. A opção de publicação deve estar em **Settings → Pages → Build and deployment → GitHub Actions**.

@@ -6,8 +6,6 @@
 <meta name="theme-color" content="#10243a">
 <meta name="description" content="Texto integral compilado dos dispositivos legais do Bloco II do edital do TJSP, organizado para leitura e impressão.">
 <title>Legislação compilada — Bloco II | TJSP</title>
-<link rel="stylesheet" href="https://www.planalto.gov.br/ccivil_03/css/header.css" media="print">
-<link rel="stylesheet" href="https://www.planalto.gov.br/ccivil_03/css/font.css" media="print">
 <style>
 :root{--navy:#10243a;--ink:#202b35;--muted:#667585;--line:#d9e0e6;--canvas:#f1f4f6;--blue:#225a80;--gold:#b88a47;--paper:#fff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -38,26 +36,9 @@ main{min-width:0}.intro{background:#fff;border:1px solid var(--line);border-radi
 .empty{padding:35px;text-align:center;background:#fff;border:1px dashed #cbd5dd;border-radius:9px;color:var(--muted)}
 footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#6c7b89}
 @media(max-width:900px){.shell{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}aside{position:static;max-height:none}#toc{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){header{padding:16px}.shell{padding:0 10px;margin:12px auto}.intro{padding:17px}.doc-head{padding:15px}.doc-body{padding:15px}.article-text,.full-text{font-size:15px}.count{width:100%;margin:0}}
-@page{size:A4;margin:19mm 18mm}
-@media print{
- body{background:#fff;color:#000;font:11pt/1.45 Georgia,"Times New Roman",serif}
- header{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 8mm}
- header .brand small{color:#444}header .brand h1{font:700 18pt Georgia,serif}
- .actions,aside,.intro,.tools,.status,footer{display:none!important}
- .shell{display:block;max-width:none;margin:0;padding:0}
- .document{border:0;border-radius:0;margin:0;overflow:visible;break-before:page}
- .document:first-of-type{break-before:auto}
- .doc-head{background:#fff;padding:0 0 7mm;border-bottom:1px solid #777}
- .doc-head h2{font:700 16pt Georgia,serif;margin:2mm 0}
- .doc-meta{font-size:9pt}
- .doc-body{padding:7mm 0 0}
- .article{border:0;margin:0 0 5mm;padding:0;break-inside:avoid}
- .article-label{font:700 10.5pt Georgia,serif}
- .article-text,.full-text{font:11pt/1.45 Georgia,"Times New Roman",serif}
- .external{border:0;padding:0;background:#fff}
- a{color:#000;text-decoration:none}
-}
+@media(max-width:560px){body>header{padding:16px}.shell{padding:0 10px;margin:12px auto}.intro{padding:17px}.doc-head{padding:15px}.doc-body{padding:15px}.article-text,.full-text{font-size:15px}.count{width:100%;margin:0}}
+
+
 
 .group-section{margin:0 0 24px;scroll-margin-top:12px}
 .group-header{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#e5ebf0;border:1px solid #cbd5dd;border-left:5px solid #234e6d;border-radius:7px;padding:12px 15px;margin:0 0 10px}
@@ -77,67 +58,68 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
 .legal-source table{border-collapse:collapse;max-width:100%;margin:.5em 0}.legal-source td,.legal-source th{border:1px solid #9da9b2;padding:4px 6px;vertical-align:top}
 .legal-line{margin:0 0 .45em;white-space:pre-wrap}.legal-line.heading{text-align:center;text-transform:uppercase;font-weight:700;margin:1em 0 .55em}.legal-line.article-line{font-weight:700;margin-top:.6em}.legal-line.paragraph{padding-left:1.5em}.legal-line.subitem{padding-left:2em}.legal-line.alinea{padding-left:3em}
 @media(max-width:600px){.group-header{align-items:flex-start}.group-header h2{font-size:16px}.doc-title-row{align-items:flex-start}.toc-group{width:100%}}
-@media print{
- .group-print,.doc-print{display:none!important}
- .group-section{break-before:page;margin-bottom:0}
- .group-section:first-child{break-before:auto}
- .group-header{background:#fff;border:0;border-bottom:1pt solid #333;border-left:3pt solid #333;border-radius:0;padding:0 0 4mm;margin:0 0 5mm}
- .group-header h2{font-size:15pt;color:#000}
- .document{border:0;border-radius:0;margin:0 0 7mm;overflow:visible;break-inside:auto}
- .doc-head{background:#fff;border:0;padding:0 0 3mm;break-after:avoid}
- .doc-head h2{font-size:13pt;color:#000}
- .doc-body{padding:3mm 0 0}
- .article{border:0;margin:0 0 3.5mm;padding:0;break-inside:avoid}
- .legal-source,.full-text{font:10.5pt/1.4 Arial,Helvetica,sans-serif}
- .legal-source p{margin:.25em 0 .45em}
- body.print-mode .group-section{display:none!important}
- body.print-mode .group-section.print-target{display:block!important;break-before:auto!important}
- body.print-mode .group-section.print-target .document{display:block!important}
- body.print-mode.print-doc .group-section.print-target .document:not(.print-target){display:none!important}
- body.print-mode.print-doc .group-section.print-target .document.print-target{display:block!important}
- body.print-mode.print-doc .group-header{display:none!important}
-}
+
 .transcription-note{margin:0 0 11px;padding:8px 10px;background:#fff7e9;border-left:3px solid #b88b49;color:#6b5431;font-size:10px}
 
 /* Impressão baseada na tipografia e na composição do texto legal do Planalto. */
-@page{size:A4;margin:15mm 10mm 15mm 20mm}
+
+
+
+.print-toc{display:none}
+@page{
+ size:A4;
+ margin:15mm 10mm 15mm 20mm;
+ @bottom-center{content:counter(page);font:9pt/12pt Arial,Helvetica,sans-serif;color:#333}
+}
 @media print{
- body{background:#fff!important;color:#000!important;font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:justify}
- body>header{display:none!important}
+ html,body{background:#fff!important;color:#000!important}
+ body{margin:0!important;font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:justify!important}
+ body>header,aside,.intro,.tools,.status,footer,.actions,.group-print,.doc-print{display:none!important}
+ .shell{display:block!important;max-width:none!important;margin:0!important;padding:0!important}
+ main{min-width:0!important}
+ .print-toc:not(:empty){display:block!important;break-after:page!important;color:#000!important;margin:0!important;padding:0!important}
+ .print-toc h1{font:700 10pt/12pt Arial,Helvetica,sans-serif!important;text-align:center!important;margin:0 0 20px!important}
+ .print-toc-group{font:700 10pt/12pt Arial,Helvetica,sans-serif!important;text-align:left!important;margin:12px 0 4px!important}
+ .print-toc-doc{font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:left!important;margin:4px 0 2px 18px!important}
+ .print-toc-heading{font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:left!important;margin:1px 0 1px 38px!important}
+ .group-section{display:block!important;margin:0!important;break-before:auto!important}
  .group-header{display:none!important}
+ .document{display:block!important;background:#fff!important;border:0!important;border-radius:0!important;margin:0!important;padding:0!important;overflow:visible!important;break-before:page!important;break-inside:auto!important}
+ .document.print-first{break-before:auto!important}
  .doc-head{background:#fff!important;border:0!important;padding:0 0 3mm!important;break-after:avoid!important}
  .doc-title-row{display:block!important}
- .doc-title-row h2,.doc-head h2{font:700 10pt/12pt Arial,Helvetica,sans-serif!important;text-align:center!important;text-transform:uppercase!important;letter-spacing:0!important;margin:0 0 20px!important;color:#000!important}
- .doc-meta{display:none!important}
+ .doc-title-row h2,.doc-head h2{font:700 10pt/12pt Arial,Helvetica,sans-serif!important;text-align:center!important;text-indent:0!important;text-transform:none!important;letter-spacing:0!important;margin:0 0 20px!important;color:#000!important}
+ .doc-discipline,.doc-meta{display:none!important}
  .doc-body{padding:0!important}
- .legal-source,.full-text,.article-text{font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:justify}
- .legal-source p{font:10pt/12pt Arial,Helvetica,sans-serif;text-align:justify;text-indent:38px;margin:20px 0;white-space:normal}
- .legal-source p[align=center],.legal-source p[align=CENTER]{text-align:center;text-indent:0}
- .legal-source p[align=left],.legal-source p[align=LEFT]{text-align:left}
- .legal-source p[align=right],.legal-source p[align=RIGHT]{text-align:right}
- .legal-source h1,.legal-source h2,.legal-source h3,.legal-source h4,.legal-source h5,.legal-source h6{font:10pt/12pt Arial,Helvetica,sans-serif;text-align:center;text-transform:uppercase;text-indent:0;margin:20px 0}
- .legal-source ol,.legal-source ul{font:10pt/12pt Arial,Helvetica,sans-serif;margin:20px 0;padding-left:38px}
- .legal-source li{font:10pt/12pt Arial,Helvetica,sans-serif;margin:0 0 6px;text-align:justify}
- .legal-source table{font:10pt/12pt Arial,Helvetica,sans-serif;border-collapse:collapse}
- .legal-line{font:10pt/12pt Arial,Helvetica,sans-serif;text-align:justify;text-indent:38px;margin:20px 0;padding:0;white-space:normal}
- .legal-line.heading{font-weight:400;text-align:center;text-indent:0;text-transform:uppercase;margin:20px 0}
- .legal-line.article-line{font-weight:400;margin-top:20px}
- .legal-line.paragraph,.legal-line.subitem,.legal-line.alinea{padding-left:0;text-indent:38px}
- .group-section{break-before:page;margin:0}
- .group-section:first-child{break-before:auto}
- .document{break-before:page;margin:0!important;border:0!important;overflow:visible!important}
- .group-section .document:first-of-type{break-before:auto}
- body.print-all .group-section,body.print-all .group-section .document{display:block!important}
+ .article{border:0!important;margin:0!important;padding:0!important;break-inside:auto!important}
+ .article:last-child{margin:0!important;padding:0!important}
+ .article-label{font:10pt/12pt Arial,Helvetica,sans-serif!important}
+ .legal-source,.legal-source *,.full-text,.full-text *,.article-text,.article-text *{font-family:Arial,Helvetica,sans-serif!important;font-size:10pt!important;line-height:12pt!important;color:#000!important}
+ .legal-source{text-align:justify!important}
+ .legal-source p,.legal-source li,.legal-source blockquote,.legal-source>div,.legal-line{font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:justify!important;text-indent:38px!important;margin:20px 0!important;white-space:normal!important}
+ .legal-source h1,.legal-source h2,.legal-source h3,.legal-source h4,.legal-source h5,.legal-source h6,.legal-line.heading{font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:center!important;text-indent:0!important;margin:20px 0!important}
+ .legal-source p[align=center],.legal-source p[align=CENTER],.legal-source div[align=center],.legal-source div[align=CENTER]{text-align:center!important;text-indent:0!important}
+ .legal-source p[align=left],.legal-source p[align=LEFT],.legal-source div[align=left],.legal-source div[align=LEFT]{text-align:left!important;text-indent:0!important}
+ .legal-source p[align=right],.legal-source p[align=RIGHT],.legal-source div[align=right],.legal-source div[align=RIGHT]{text-align:right!important;text-indent:0!important}
+ .legal-source p[align=justify],.legal-source p[align=JUSTIFY]{text-align:justify!important}
+ .legal-source ol,.legal-source ul{font:10pt/12pt Arial,Helvetica,sans-serif!important;margin:20px 0!important;padding-left:0!important}
+ .legal-source table{font:10pt/12pt Arial,Helvetica,sans-serif!important;border-collapse:collapse!important;margin:20px 0!important}
+ .legal-source td,.legal-source th{font:10pt/12pt Arial,Helvetica,sans-serif!important;padding:0!important;border:0!important}
+ .legal-line{padding:0!important}
+ .legal-line.paragraph,.legal-line.subitem,.legal-line.alinea{padding:0!important;text-indent:38px!important}
+ .legal-line.article-line{font-weight:400!important}
+ .legal-source a{color:#000!important;text-decoration:none!important}
+ .external,.transcription-note,.stale-note{background:#fff!important;border:0!important;padding:0!important;color:#000!important;font:9pt/12pt Arial,Helvetica,sans-serif!important}
  body.print-mode .group-section{display:none!important}
- body.print-mode .group-section.print-target{display:block!important;break-before:auto!important}
- body.print-mode .group-section.print-target .document{display:block!important}
- body.print-mode .group-section.print-target .document:first-of-type{break-before:auto!important}
- body.print-mode .document.print-target{display:block!important;break-before:auto!important}
+ body.print-mode .group-section.print-target{display:block!important}
  body.print-mode.print-doc .group-section.print-target .document:not(.print-target){display:none!important}
+ body.print-mode.print-doc .group-section.print-target .document.print-target{display:block!important}
+ body.print-all .group-section,body.print-all .group-section .document{display:block!important}
 }
 </style>
 </head>
 <body>
+<noscript><div class="status">Esta apostila precisa de JavaScript para carregar os textos compilados. Ative o JavaScript e abra a página pelo GitHub Pages.</div></noscript>
 <header><div class="head"><div class="brand"><small>Tribunal de Justiça do Estado de São Paulo • Concurso</small><h1>Bloco II — Legislação compilada</h1></div><div class="actions"><a class="primary" href="index.html">Voltar aos resumos</a><button id="print" disabled>Imprimir TUDO</button></div></div></header>
 <div class="shell">
 <aside><p class="side-title">Sumário dos diplomas</p><nav id="toc" aria-label="Sumário"></nav><div class="aside-foot">Texto legal em sequência, com recorte limitado aos dispositivos do edital. Use a busca para localizar artigo ou expressão.</div></aside>
@@ -145,76 +127,17 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
 <section class="intro"><div class="kicker">Apostila de leitura e impressão</div><h2>Texto dos dispositivos previstos no edital</h2><p>Esta página prioriza a legislação, não os resumos. Os dispositivos aparecem em sequência, agrupados por diploma e na ordem do programa. A busca filtra artigos por número e conteúdo; a impressão gera uma apostila em formato A4. Os textos são extraídos das fontes oficiais indicadas em cada diploma.</p></section>
 <div class="tools"><input id="search" class="search" type="search" placeholder="Buscar artigo, palavra ou expressão..." aria-label="Buscar na legislação"><button id="clear" class="tool-btn">Limpar busca</button><button id="print-all" class="tool-btn print-all" type="button" disabled>Imprimir tudo — apostila completa</button><span id="count" class="count" aria-live="polite">Carregando legislação…</span></div>
 <div id="status" class="status">Carregando textos oficiais compilados…</div>
+<div id="print-toc" class="print-toc"></div>
 <div id="documents"></div>
 </main>
 </div>
 <footer>Material compilado para leitura e estudo com base nas fontes oficiais vinculadas. Confira o texto oficial, alterações posteriores, notas de vigência e eventuais retificações antes da prova. A Resolução TJSP nº 963/2025 é disponibilizada pelo sistema GCN/e-SAJ, por isso sua consulta integral abre a página oficial.</footer>
 <script>
-const $=s=>document.querySelector(s);
+const $=selector=>document.querySelector(selector);
 let docs=[];
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const norm=s=>String(s??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
-function articleHtml(a){
- const label=a.label||("Art. "+a.number+(a.suffix?"-"+a.suffix:""));
- return '<article class="article" data-search="'+esc(norm(label+" "+a.body))+'"><div class="article-label">'+esc(label)+'</div><div class="article-text">'+esc(a.body||"")+'</div></article>';
-}
-function docHtml(d,i){
- const source='<a target="_blank" rel="noopener noreferrer" href="'+esc(d.source)+'">Abrir fonte oficial ↗</a>';
- const heading='<header class="doc-head"><div class="doc-discipline">'+esc(d.discipline)+'</div><h2>'+esc(d.title)+'</h2><div class="doc-meta"><span>'+esc(d.updated||"Fonte oficial")+'</span><span>'+source+'</span></div></header>';
- let body="";
- if(d.externalOnly){
-   body='<div class="doc-body"><div class="external">'+esc(d.fullText||"Consulte o inteiro teor na fonte oficial.")+'<p><a href="'+esc(d.source)+'" target="_blank" rel="noopener noreferrer">Consultar e imprimir o inteiro teor no portal oficial ↗</a></p></div></div>';
- } else if(d.fullText){
-   body='<div class="doc-body"><div class="full-text">'+esc(d.fullText)+'</div></div>';
- } else {
-   body='<div class="doc-body">'+(d.articles||[]).map(articleHtml).join("")+'</div>';
- }
- const note=d.transcriptionNote?'<div class="doc-body"><div class="transcription-note">'+esc(d.transcriptionNote)+'</div></div>':"";
- return '<section class="document" id="doc-'+esc(d.id)+'" data-doc="'+esc(d.id)+'">'+heading+note+body+'</section>';
-}
-function render(){
- $("#toc").innerHTML=docs.map((d,i)=>'<a class="toc-link" href="#doc-'+esc(d.id)+'">'+esc(d.title)+'</a>').join("");
- $("#documents").innerHTML=docs.map(docHtml).join("");
- applySearch();
-}
-function applySearch(){
- const q=norm($("#search").value.trim());let found=0,visibleDocs=0;
- document.querySelectorAll(".document").forEach(sec=>{
-   let sectionMatch=false;
-   const articles=sec.querySelectorAll(".article");
-   if(articles.length){
-     articles.forEach(a=>{const ok=!q||norm(a.dataset.search).includes(q);a.hidden=!ok;if(ok){found++;sectionMatch=true;}});
-   } else {
-     const body=sec.querySelector(".full-text,.external");
-     const ok=!q||(body&&norm(body.textContent).includes(q));
-     if(body)body.hidden=!ok;
-     if(ok){found++;sectionMatch=true;}
-   }
-   sec.hidden=!sectionMatch;
-   if(sectionMatch)visibleDocs++;
- });
- $("#count").textContent=q?found+" ocorrência(s) em "+visibleDocs+" diploma(s)":docs.length+" diplomas • texto integral do recorte";
-}
-async function load(){
- try{
-  const response=await fetch("data/legislacao.json",{cache:"no-store"});
-  if(!response.ok)throw new Error("Arquivo da legislação ainda não foi gerado ("+response.status+").");
-  const data=await response.json();docs=data.documents||[];
-  if(!docs.length)throw new Error("O arquivo foi carregado, mas não contém diplomas.");
-  render();$("#status").hidden=true;$("#print").disabled=false;$("#print-all").disabled=false;
- }catch(error){
-  $("#status").innerHTML="<strong>Não foi possível carregar a apostila.</strong><br>"+esc(error.message)+"<br>O gerador automático do repositório precisa concluir a compilação antes da publicação.";
-  $("#count").textContent="Conteúdo indisponível";
- }
-}
-$("#search").addEventListener("input",applySearch);
-$("#clear").addEventListener("click",()=>{$("#search").value="";applySearch();});
-$("#print").addEventListener("click",()=>printSelection("all",""));
-$("#print-all").addEventListener("click",()=>printSelection("all",""));
-load();
-</script>
-
-<script>
+let lastPrintSearch=null;
+const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const norm=value=>String(value??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const legalGroups=[
  {id:"penal",index:"01",title:"DIREITO PENAL",items:["cp"]},
  {id:"processo-penal",index:"02",title:"DIREITO PROCESSUAL PENAL",items:["cpp","jec_criminal"]},
@@ -223,79 +146,196 @@ const legalGroups=[
  {id:"administrativo",index:"05",title:"DIREITO ADMINISTRATIVO",items:["estatuto","lia"]},
  {id:"interna",index:"06",title:"LEGISLAÇÃO INTERNA",items:["res850","res963","lc1111","regimento","nscgj"]}
 ];
-function legalTextMarkup(value){
+function legalTextMarkup(value,docId){
+ let headingNumber=0;
  return String(value||"").split(/\r?\n/).map(line=>{
-  const t=line.trim();if(!t)return "";
-  let cls="legal-line";
-  if(/^(PARTE|LIVRO|TÍTULO|TITULO|CAPÍTULO|CAPITULO|SEÇÃO|SECAO|SUBSEÇÃO|SUBSECAO)\b/i.test(t))cls+=" heading";
-  else if(/^Art(?:igo)?\.?\s*\d/i.test(t))cls+=" article-line";
-  else if(/^(?:§|Parágrafo único)/i.test(t))cls+=" paragraph";
-  else if(/^(?:[IVXLCDM]+|[0-9]+)\s*[-–.)]/.test(t))cls+=" subitem";
-  else if(/^[a-z]\s*[\])]/i.test(t))cls+=" alinea";
-  return '<p class="'+cls+'">'+esc(t)+'</p>';
+  const text=line.trim();
+  if(!text)return "";
+  let cls="legal-line",id="";
+  if(/^(PARTE|LIVRO|TÍTULO|TITULO|CAPÍTULO|CAPITULO|SEÇÃO|SECAO|SUBSEÇÃO|SUBSECAO)\b/i.test(text)){
+   cls+=" heading";
+   headingNumber++;
+   id=' id="h-'+esc(docId)+'-'+headingNumber+'"';
+  }else if(/^Art(?:igo)?\.?\s*\d/i.test(text))cls+=" article-line";
+  else if(/^(?:§|Parágrafo único)/i.test(text))cls+=" paragraph";
+  else if(/^(?:[IVXLCDM]+|[0-9]+)\s*[-–.)]/.test(text))cls+=" subitem";
+  else if(/^[a-z]\s*[\])]/i.test(text))cls+=" alinea";
+  return '<p'+id+' class="'+cls+'">'+esc(text)+'</p>';
  }).join("");
 }
-articleHtml=function(a){
- const label=a.label||("Art. "+a.number+(a.suffix?"-"+a.suffix:""));
- const markup=a.html?'<div class="legal-source">'+a.html+'</div>':'<div class="article-text">'+legalTextMarkup(a.body)+'</div>';
- return '<article class="article" data-search="'+esc(norm(label+" "+a.body))+'">'+markup+'</article>';
-};
-docHtml=function(d){
- const source='<a target="_blank" rel="noopener noreferrer" href="'+esc(d.source)+'">Abrir fonte oficial ↗</a>';
- const title='<header class="doc-head"><div class="doc-title-row"><h2>'+esc(d.title)+'</h2><button class="doc-print" type="button" data-print="doc" data-target="'+esc(d.id)+'">Imprimir este diploma</button></div><div class="doc-meta"><span>'+esc(d.updated||"Fonte oficial")+'</span><span>'+source+'</span></div></header>';
+function articleHtml(article,doc){
+ const label=article.label||("Art. "+article.number+(article.suffix?"-"+article.suffix:""));
+ const markup=article.html
+  ? '<div class="legal-source">'+article.html+'</div>'
+  : '<div class="article-text">'+legalTextMarkup(article.body,doc.id)+'</div>';
+ return '<article class="article" data-search="'+esc(norm(label+" "+article.body))+'">'+markup+'</article>';
+}
+function docHtml(doc){
+ const source=doc.source?'<a target="_blank" rel="noopener noreferrer" href="'+esc(doc.source)+'">Abrir fonte indicada ↗</a>':"";
+ const heading='<div class="doc-head"><div class="doc-title-row"><h2>'+esc(doc.title)+'</h2><button class="doc-print" type="button" data-print="doc" data-target="'+esc(doc.id)+'">Imprimir este diploma</button></div><div class="doc-meta"><span>'+esc(doc.updated||"Fonte indicada")+'</span><span>'+source+'</span></div></div>';
  let body="";
- if(d.fullHtml)body='<div class="doc-body"><div class="legal-source">'+d.fullHtml+'</div></div>';
- else if(d.fullText)body='<div class="doc-body"><div class="full-text">'+legalTextMarkup(d.fullText)+'</div></div>';
- else body='<div class="doc-body">'+(d.articles||[]).map(articleHtml).join("")+'</div>';
- const note=d.transcriptionNote?'<div class="doc-body"><div class="external">'+esc(d.transcriptionNote)+'</div></div>':"";
- return '<section class="document" id="doc-'+esc(d.id)+'" data-doc="'+esc(d.id)+'">'+title+note+body+'</section>';
-};
-render=function(){
- const byId=new Map(docs.map(d=>[d.id,d]));
- $("#toc").innerHTML=legalGroups.map(g=>'<div class="toc-group"><a href="#group-'+g.id+'">'+g.index+'. '+esc(g.title)+'</a><div class="toc-docs">'+g.items.map(id=>byId.has(id)?'<a href="#doc-'+id+'">'+esc(byId.get(id).title)+'</a>':"").join("")+'</div></div>').join("");
- $("#documents").innerHTML=legalGroups.map(g=>{
-  const items=g.items.map(id=>byId.get(id)).filter(Boolean);
-  return '<section class="group-section" id="group-'+g.id+'" data-group="'+g.id+'"><header class="group-header"><div><span class="group-index">AGRUPAMENTO '+g.index+'</span><h2>'+esc(g.title)+'</h2></div><button class="group-print" type="button" data-print="group" data-target="'+g.id+'">Imprimir agrupamento</button></header>'+items.map(docHtml).join("")+'</section>';
+ if(doc.externalOnly){
+  body='<div class="doc-body"><div class="external">'+esc(doc.fullText||"Consulte o inteiro teor na fonte indicada.")+'<p><a href="'+esc(doc.source)+'" target="_blank" rel="noopener noreferrer">Consultar o inteiro teor ↗</a></p></div></div>';
+ }else if(doc.fullHtml){
+  body='<div class="doc-body"><div class="legal-source">'+doc.fullHtml+'</div></div>';
+ }else if(doc.fullText){
+  body='<div class="doc-body"><div class="full-text">'+legalTextMarkup(doc.fullText,doc.id)+'</div></div>';
+ }else{
+  body='<div class="doc-body">'+(doc.articles||[]).map(article=>articleHtml(article,doc)).join("")+'</div>';
+ }
+ const notes=[];
+ if(doc.stale)notes.push('<div class="stale-note">Versão anterior reaproveitada; fonte desatualizada nesta compilação. '+esc(doc.error||"A atualização da fonte falhou.")+'</div>');
+ if(doc.transcriptionNote)notes.push('<div class="transcription-note">'+esc(doc.transcriptionNote)+'</div>');
+ const noteHtml=notes.length?'<div class="doc-body">'+notes.join("")+'</div>':"";
+ return '<section class="document" id="doc-'+esc(doc.id)+'" data-doc="'+esc(doc.id)+'">'+heading+noteHtml+body+'</section>';
+}
+function docsForGroup(group){
+ const byId=new Map(docs.map(doc=>[doc.id,doc]));
+ return group.items.map(id=>byId.get(id)).filter(Boolean);
+}
+function render(){
+ const byId=new Map(docs.map(doc=>[doc.id,doc]));
+ $("#toc").innerHTML=legalGroups.map(group=>{
+  const links=group.items.map(id=>byId.has(id)?'<a href="#doc-'+esc(id)+'">'+esc(byId.get(id).title)+'</a>':"").join("");
+  return '<div class="toc-group"><a href="#group-'+esc(group.id)+'">'+group.index+'. '+esc(group.title)+'</a><div class="toc-docs">'+links+'</div></div>';
+ }).join("");
+ $("#documents").innerHTML=legalGroups.map(group=>{
+  const items=docsForGroup(group);
+  return '<section class="group-section" id="group-'+esc(group.id)+'" data-group="'+esc(group.id)+'"><div class="group-header"><div><span class="group-index">AGRUPAMENTO '+group.index+'</span><h2>'+esc(group.title)+'</h2></div><button class="group-print" type="button" data-print="group" data-target="'+esc(group.id)+'">Imprimir agrupamento</button></div>'+items.map(docHtml).join("")+'</section>';
  }).join("");
  applySearch();
-};
-applySearch=function(){
- const q=norm($("#search").value.trim());let docsFound=0,articlesFound=0;
- document.querySelectorAll(".document").forEach(sec=>{
-  let matched=false;const articles=sec.querySelectorAll(".article");
-  if(articles.length){
-   articles.forEach(a=>{const ok=!q||norm(a.dataset.search).includes(q);a.hidden=!ok;if(ok){matched=true;articlesFound++;}});
-  }else{
-   const body=sec.querySelector(".full-text,.legal-source,.external");
-   const ok=!q||(body&&norm(body.textContent).includes(q));
-   if(body)body.hidden=!ok;matched=!!ok;
-  }
-  sec.hidden=!matched;if(matched)docsFound++;
- });
- document.querySelectorAll(".group-section").forEach(g=>g.hidden=!Array.from(g.querySelectorAll(".document")).some(d=>!d.hidden));
- $("#count").textContent=q?articlesFound+" artigo(s) encontrados em "+docsFound+" diploma(s)":docs.length+" diplomas em 6 agrupamentos";
-};
-let lastPrintSearch=null;
-function printSelection(type,id){
- lastPrintSearch=$("#search").value;$("#search").value="";applySearch();
- document.body.classList.remove("print-mode","print-doc","print-all");
- document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));
- if(type==="all"){document.body.classList.add("print-all");requestAnimationFrame(()=>window.print());return;}
- document.body.classList.add("print-mode");
- if(type==="group"){
-  const group=document.querySelector('.group-section[data-group="'+CSS.escape(id)+'"]');
-  if(group)group.classList.add("print-target");
- }else{
-  const doc=document.querySelector('.document[data-doc="'+CSS.escape(id)+'"]');
-  const group=doc&&doc.closest(".group-section");
-  if(doc&&group){group.classList.add("print-target");doc.classList.add("print-target");document.body.classList.add("print-doc");}
- }
- setTimeout(()=>window.print(),80);
 }
-document.querySelector("#documents").addEventListener("click",event=>{
- const btn=event.target.closest("[data-print]");if(btn)printSelection(btn.dataset.print,btn.dataset.target);
+function applySearch(){
+ const query=norm($("#search").value.trim());
+ let docsFound=0,articlesFound=0;
+ document.querySelectorAll(".document").forEach(section=>{
+  let matched=false;
+  const articles=section.querySelectorAll(".article");
+  if(articles.length){
+   articles.forEach(article=>{
+    const visible=!query||norm(article.dataset.search+" "+article.textContent).includes(query);
+    article.hidden=!visible;
+    if(visible){matched=true;articlesFound++;}
+   });
+  }else{
+   const content=section.querySelector(".full-text,.legal-source,.external");
+   const visible=!query||(content&&norm(content.textContent).includes(query));
+   if(content)content.hidden=!visible;
+   matched=!!visible;
+   if(matched)articlesFound++;
+  }
+  section.hidden=!matched;
+  if(matched)docsFound++;
+ });
+ document.querySelectorAll(".group-section").forEach(group=>{
+  group.hidden=!Array.from(group.querySelectorAll(".document")).some(doc=>!doc.hidden);
+ });
+ $("#count").textContent=query
+  ?articlesFound+" ocorrência(s) em "+docsFound+" diploma(s)"
+  :docs.length+" diplomas organizados em 6 agrupamentos";
+}
+function printTocDocument(doc){
+ const headings=Array.isArray(doc.headings)?doc.headings:[];
+ return '<div class="print-toc-doc">'+esc(doc.title)+'</div>'+headings.map(item=>'<div class="print-toc-heading">'+esc(item.text)+'</div>').join("");
+}
+function buildPrintToc(type,id){
+ let markup='<h1>SUMÁRIO</h1>';
+ if(type==="doc"){
+  const doc=docs.find(item=>item.id===id);
+  const headings=doc&&Array.isArray(doc.headings)?doc.headings:[];
+  if(!headings.length){$("#print-toc").innerHTML="";return false;}
+  markup+=headings.map(item=>'<div class="print-toc-heading">'+esc(item.text)+'</div>').join("");
+ }else{
+  const groups=type==="group"?legalGroups.filter(group=>group.id===id):legalGroups;
+  groups.forEach(group=>{
+   const groupDocs=docsForGroup(group);
+   if(!groupDocs.length)return;
+   if(type==="all")markup+='<div class="print-toc-group">'+esc(group.title)+'</div>';
+   groupDocs.forEach(doc=>{markup+=printTocDocument(doc);});
+  });
+ }
+ $("#print-toc").innerHTML=markup;
+ return true;
+}
+function resetPrintState(){
+ document.body.classList.remove("print-mode","print-doc","print-all");
+ document.querySelectorAll(".print-target,.print-first").forEach(element=>{
+  element.classList.remove("print-target","print-first");
+ });
+}
+function printSelection(type,id){
+ lastPrintSearch=$("#search").value;
+ $("#search").value="";
+ applySearch();
+ resetPrintState();
+ if(type==="all"){
+  document.body.classList.add("print-all");
+ }else{
+  document.body.classList.add("print-mode");
+  if(type==="group"){
+   const group=document.querySelector('.group-section[data-group="'+CSS.escape(id)+'"]');
+   if(group)group.classList.add("print-target");
+  }else{
+   const doc=document.querySelector('.document[data-doc="'+CSS.escape(id)+'"]');
+   const group=doc&&doc.closest(".group-section");
+   if(doc&&group){
+    group.classList.add("print-target");
+    doc.classList.add("print-target");
+    document.body.classList.add("print-doc");
+   }
+  }
+ }
+ buildPrintToc(type,id);
+ const first=type==="doc"
+  ?document.querySelector('.document[data-doc="'+CSS.escape(id)+'"]')
+  :type==="group"
+   ?document.querySelector('.group-section[data-group="'+CSS.escape(id)+'"] .document')
+   :document.querySelector(".group-section .document");
+ if(first)first.classList.add("print-first");
+ requestAnimationFrame(()=>window.print());
+}
+async function load(){
+ try{
+  const response=await fetch("data/legislacao.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("O arquivo compilado não está disponível ("+response.status+").");
+  const data=await response.json();
+  docs=Array.isArray(data.documents)?data.documents:[];
+  if(!docs.length)throw new Error("O arquivo foi carregado, mas não contém diplomas.");
+  render();
+  $("#status").hidden=true;
+  $("#print").disabled=false;
+  $("#print-all").disabled=false;
+  const stale=docs.filter(doc=>doc.stale).length;
+  if(stale)$("#count").textContent+=" • "+stale+" desatualizado(s)";
+ }catch(error){
+  const localFile=location.protocol==="file:";
+  const advice=localFile
+   ?" Abra a página pelo endereço do GitHub Pages, não pelo arquivo local."
+   :" Verifique a publicação do GitHub Pages e a geração de data/legislacao.json em Actions.";
+  $("#status").innerHTML="<strong>Não foi possível carregar a apostila.</strong><br>"+esc(error.message)+esc(advice);
+  $("#count").textContent="Conteúdo indisponível";
+ }
+}
+$("#search").addEventListener("input",applySearch);
+$("#clear").addEventListener("click",()=>{
+ $("#search").value="";
+ applySearch();
 });
-window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc","print-all");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));if(lastPrintSearch!==null){$("#search").value=lastPrintSearch;lastPrintSearch=null;applySearch();}});
+$("#print").addEventListener("click",()=>printSelection("all",""));
+$("#print-all").addEventListener("click",()=>printSelection("all",""));
+$("#documents").addEventListener("click",event=>{
+ const button=event.target.closest("[data-print]");
+ if(button)printSelection(button.dataset.print,button.dataset.target);
+});
+window.addEventListener("afterprint",()=>{
+ resetPrintState();
+ if(lastPrintSearch!==null){
+  $("#search").value=lastPrintSearch;
+  lastPrintSearch=null;
+  applySearch();
+ }
+});
+load();
 </script>
 
 </body>

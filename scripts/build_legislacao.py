@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
+import copy
 import io
 import json
 import re
 import sys
 import urllib.request
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -164,6 +166,9 @@ SOURCES = {
     },
 }
 
+STRUCTURAL_HEADING_RE = re.compile(r"^(PARTE|LIVRO|TÍTULO|TITULO|CAPÍTULO|CAPITULO|SEÇÃO|SECAO|SUBSEÇÃO|SUBSECAO)\b", re.IGNORECASE)
+STRUCTURAL_LINE_RE = re.compile(r"^(?:Art(?:igo)?\.?\s*\d|§+\s*\d|Parágrafo único\b|[IVXLCDM]+\s*[-–.)]|[a-z]\s*[\])}.:-]|PARTE\b|LIVRO\b|TÍTULO\b|TITULO\b|CAPÍTULO\b|CAPITULO\b|SEÇÃO\b|SECAO\b|SUBSEÇÃO\b|SUBSECAO\b)", re.IGNORECASE)
+
 ARTICLE_RE = re.compile(
     r"^\s*Art(?:igo)?\.?\s*(\d{1,3}(?:\.\d{3})?|\d{1,4})\s*(?:[º°ªo]\s*)?(?:[-–]\s*([A-Za-z]))?(?=$|[\s.:;])",
     re.IGNORECASE,
@@ -195,19 +200,7 @@ def parse_soup(content):
     return soup
 
 def html_lines(content):
-    soup = parse_soup(content)
-    raw_lines = clean_lines(soup.get_text("\n", strip=True))
-    lines = []
-    i = 0
-    while i < len(raw_lines):
-        line = raw_lines[i]
-        if re.match(r"^Art(?:igo)?\.?\s*\d{1,4}$", line, re.IGNORECASE) and i + 1 < len(raw_lines):
-            if re.match(r"^(?:[º°ªo]\b|[-–]\s*[A-Za-z]\b)", raw_lines[i + 1], re.IGNORECASE):
-                line = line + " " + raw_lines[i + 1]
-                i += 1
-        lines.append(line)
-        i += 1
-    return lines
+    return [line for block in legal_blocks(content) for line in block["lines"]]
 
 ALLOWED_TAGS = {
     "p", "div", "span", "strong", "b", "em", "i", "u", "sup", "sub",
@@ -291,24 +284,68 @@ def clean_fragment(node):
         element.attrs = kept
     return str(fragment)
 
-def legal_blocks(content):
+def node_lines(node):
+    parts = []
+    for child in node.descendants:
+        if getattr(child, "name", None) == "br":
+            parts.append("\n")
+        elif isinstance(child, NavigableString):
+            parts.append(str(child))
+    raw = "".join(parts).replace("\xa0", " ").replace("\u200b", "")
+    result = []
+    for line in clean_lines(raw):
+        if result and not STRUCTURAL_LINE_RE.match(line):
+            result[-1] = (result[-1] + " " + line).strip()
+        else:
+            result.append(line)
+    return result
+
+
+def legal_blocks(content, doc_id="documento"):
     soup = parse_soup(content)
     root = soup.body or soup
-    candidates = root.find_all(["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table"])
+    tags = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table"]
     blocks = []
-    for node in candidates:
+    seen = set()
+    heading_number = 0
+    for node in root.find_all(tags):
+        if node.find(tags):
+            continue
         text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
         if not text:
             continue
+        html = clean_fragment(node)
+        fingerprint = (node.name, text, html)
+        if fingerprint in seen:
+            continue
+        seen.add(fingerprint)
+        lines = node_lines(node) or [text]
+        heading_match = STRUCTURAL_HEADING_RE.match(text)
+        heading_id = None
+        if heading_match:
+            heading_number += 1
+            heading_id = f"h-{doc_id}-{heading_number}"
+            html = f'<div id="{heading_id}" class="legal-heading-anchor">{html}</div>'
         blocks.append({
             "text": text,
-            "html": clean_fragment(node),
+            "lines": lines,
+            "html": html,
             "isArticle": bool(ARTICLE_RE.match(text)),
+            "isHeading": bool(heading_match),
+            "headingId": heading_id,
         })
     return blocks
 
-def extract_html_articles(spec, content):
-    blocks = legal_blocks(content)
+
+def headings_from_blocks(blocks):
+    return [
+        {"id": block["headingId"], "text": block["text"], "level": STRUCTURAL_HEADING_RE.match(block["text"]).group(1).upper()}
+        for block in blocks if block.get("isHeading")
+    ]
+
+
+def extract_html_articles(spec, content, blocks=None):
+    blocks = blocks if blocks is not None else legal_blocks(content)
     starts = [i for i, block in enumerate(blocks) if block["isArticle"]]
     records = []
     for position, start in enumerate(starts):
@@ -335,44 +372,88 @@ def extract_html_articles(spec, content):
         )
     return records
 
-def extract_full_html(content):
-    blocks = legal_blocks(content)
+def extract_full_html(content, blocks=None):
+    blocks = blocks if blocks is not None else legal_blocks(content)
     return "\n".join(block["html"] for block in blocks)
+
+def is_page_number(line):
+    return bool(re.fullmatch(r"(?:p(?:á|a)g(?:ina)?\.?\s*)?\d{1,4}(?:\s*/\s*\d{1,4})?|[-–]?\s*\d{1,4}\s*[-–]?", line, re.IGNORECASE))
+
+
+def reflow_pdf_pages(pages):
+    edge_counts = Counter()
+    for lines in pages:
+        edge_counts.update(set(lines[:2] + lines[-2:]))
+    threshold = max(2, (len(pages) + 2) // 3)
+    repeated_edges = {
+        line for line, count in edge_counts.items()
+        if count >= threshold and len(line) >= 4
+    }
+    paragraphs = []
+    current = ""
+    for lines in pages:
+        for line in lines:
+            line = re.sub(r"\s+", " ", line).strip()
+            if not line or is_page_number(line) or line in repeated_edges:
+                continue
+            if STRUCTURAL_LINE_RE.match(line):
+                if current:
+                    paragraphs.append(current)
+                current = line
+            elif not current:
+                current = line
+            elif current.endswith("-") and re.match(r"^[a-záéíóúãõç]", line, re.IGNORECASE):
+                current = current[:-1] + line
+            else:
+                current += " " + line
+    if current:
+        paragraphs.append(current)
+    return paragraphs
+
 
 def pdf_text(content):
     reader = PdfReader(io.BytesIO(content))
     pages = []
-    for number, page in enumerate(reader.pages, 1):
-        text = page.extract_text() or ""
-        if text.strip():
-            pages.append("\n".join(clean_lines(text)))
-    return "\n\n".join(pages)
+    for page in reader.pages:
+        pages.append(clean_lines(page.extract_text() or ""))
+    return "\n".join(reflow_pdf_pages(pages))
+
+
+def headings_from_text(text, doc_id):
+    headings = []
+    for line in clean_lines(text):
+        match = STRUCTURAL_HEADING_RE.match(line)
+        if match:
+            headings.append({
+                "id": f"h-{doc_id}-{len(headings) + 1}",
+                "text": line,
+                "level": match.group(1).upper(),
+            })
+    return headings
+
 
 def parse_articles(text):
     records = []
     current = None
+
+    def finish():
+        if current:
+            current["body"] = "\n".join(current.pop("_lines")).strip()
+            records.append(current)
+
     for line in clean_lines(text):
         match = ARTICLE_RE.match(line)
         if match:
-            if current:
-                body_lines = current.pop("_lines")
-                body_lines[0] = ARTICLE_RE.sub("", body_lines[0], count=1)
-                body_lines[0] = re.sub(r"^\s*[-–.:]\s*", "", body_lines[0])
-                current["body"] = "\n".join(body_lines).strip()
-                records.append(current)
-            number = int(match.group(1).replace('.', ''))
+            finish()
+            number = int(match.group(1).replace(".", ""))
             suffix = (match.group(2) or "").upper()
             label = f"Art. {number}" + (f"-{suffix}" if suffix else "")
             current = {"number": number, "suffix": suffix, "label": label, "_lines": [line]}
         elif current:
             current["_lines"].append(line)
-    if current:
-        body_lines = current.pop("_lines")
-        body_lines[0] = ARTICLE_RE.sub("", body_lines[0], count=1)
-        body_lines[0] = re.sub(r"^\s*[-–.:]\s*", "", body_lines[0])
-        current["body"] = "\n".join(body_lines).strip()
-        records.append(current)
+    finish()
     return records
+
 
 def chosen(article, spec):
     number = article["number"]
@@ -380,15 +461,6 @@ def chosen(article, spec):
     in_range = any(start <= number <= end for start, end in spec.get("ranges", []))
     exact = (number, suffix) in spec.get("exact", [])
     return in_range or exact
-
-def extract_html_articles(spec, content):
-    records = parse_articles("\n".join(html_lines(content)))
-    selected = [a for a in records if chosen(a, spec)]
-    if len(selected) < spec.get("minimum", 1):
-        raise RuntimeError(
-            f'{spec["title"]}: extraídos {len(selected)} artigos; mínimo esperado {spec.get("minimum")}.'
-        )
-    return selected
 
 def build_document(key, spec):
     raw, content_type = download(spec.get("download_url", spec["url"]))
@@ -401,72 +473,117 @@ def build_document(key, spec):
         "source": spec.get("official_url", spec["url"]),
         "updated": spec["updated"],
     }
-    if kind in ("html", "html_full"):
-        lines = html_lines(raw)
+    if kind in ("html", "html_full", "html_block"):
+        blocks = legal_blocks(raw, key)
+        lines = [line for block in blocks for line in block["lines"]]
         text = "\n".join(lines)
+        base["headings"] = headings_from_blocks(blocks)
         if kind == "html_full":
             base["fullText"] = text
-            base["fullHtml"] = extract_full_html(raw)
+            base["fullHtml"] = extract_full_html(raw, blocks)
             base["articles"] = parse_articles(text)
+        elif kind == "html_block":
+            start = next((i for i, line in enumerate(lines) if "preâmbulo" in line.lower()), None)
+            if start is None:
+                raise RuntimeError(f'{spec["title"]}: preâmbulo não localizado na página de compilação.')
+            end = next((i for i in range(start, len(lines)) if re.search(r"\bArt\.?\s*43\b", lines[i])), None)
+            if end is None:
+                raise RuntimeError(f'{spec["title"]}: artigo final 43 não localizado.')
+            selected_lines = lines[start:end + 1]
+            records = parse_articles("\n".join(selected_lines))
+            if len(records) < spec.get("minimum", 1):
+                raise RuntimeError(f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}.')
+            base["fullText"] = "\n".join(selected_lines).strip()
+            base["textFormat"] = "pdf-structured"
+            base["articles"] = records
+            first_block = next((i for i, block in enumerate(blocks) if "preâmbulo" in block["text"].lower()), 0)
+            last_block = next((i + 1 for i, block in enumerate(blocks) if re.search(r"\bArt\.?\s*43\b", block["text"])), len(blocks))
+            selected_blocks = blocks[first_block:last_block]
+            base["fullHtml"] = "\n".join(block["html"] for block in selected_blocks)
+            base["headings"] = headings_from_blocks(selected_blocks)
+            base["transcriptionNote"] = "Texto extraído de compilação secundária datada de 19/10/2026; fonte primária oficial do TJSP vinculada no GCN/e-SAJ."
         else:
-            base["articles"] = extract_html_articles(spec, raw)
+            base["articles"] = extract_html_articles(spec, raw, blocks)
     elif kind == "pdf_full":
         text = pdf_text(raw)
         if len(text) < 1000:
             raise RuntimeError(f'{spec["title"]}: extração de PDF vazia ou incompleta.')
         base["fullText"] = text
         base["textFormat"] = "pdf-structured"
-    elif kind == "html_block":
-        lines = html_lines(raw)
-        start = next((i for i, line in enumerate(lines) if "preâmbulo" in line.lower()), None)
-        if start is None:
-            raise RuntimeError(f'{spec["title"]}: preâmbulo não localizado na página de compilação.')
-        end = next((i for i in range(start, len(lines)) if re.search(r"\bArt\.?\s*43\b", lines[i])), None)
-        if end is None:
-            raise RuntimeError(f'{spec["title"]}: artigo final 43 não localizado.')
-        text = "\n".join(lines[start:end + 1]).strip()
-        records = parse_articles(text)
-        if len(records) < spec.get("minimum", 1):
-            raise RuntimeError(f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}.')
-        base["fullText"] = text
-        base["textFormat"] = "pdf-structured"
-        base["articles"] = records
-        blocks = legal_blocks(raw)
-        context_start = next((i for i, block in enumerate(blocks) if "preâmbulo" in block["text"].lower()), None)
-        context_end = next((i for i in range(context_start or 0, len(blocks)) if re.search(r"\bArt\.?\s*43\b", blocks[i]["text"])), None)
-        if context_start is not None and context_end is not None:
-            base["fullHtml"] = "\n".join(block["html"] for block in blocks[context_start:context_end + 1])
-        base["transcriptionNote"] = "Texto extraído de compilação secundária datada de 19/10/2026; fonte primária oficial do TJSP vinculada no GCN/e-SAJ."
+        base["headings"] = headings_from_text(text, key)
     elif kind == "pdf_ranges":
         text = pdf_text(raw)
         records = parse_articles(text)
-        selected = [a for a in records if chosen(a, spec)]
+        selected = [article for article in records if chosen(article, spec)]
         if len(selected) < spec.get("minimum", 1):
             raise RuntimeError(
                 f'{spec["title"]}: extraídos {len(selected)} artigos; mínimo esperado {spec.get("minimum")}.'
             )
         base["articles"] = selected
         base["textFormat"] = "pdf-structured"
+        base["headings"] = headings_from_text(text, key)
     else:
         raise RuntimeError(f"Tipo de fonte desconhecido: {kind}")
     if not base.get("fullText") and not base.get("articles"):
         raise RuntimeError(f'{spec["title"]}: nenhum texto foi extraído.')
     return base
 
+
+def load_previous_documents():
+    if not OUT.exists():
+        return {}
+    try:
+        payload = json.loads(OUT.read_text(encoding="utf-8"))
+        return {document["id"]: document for document in payload.get("documents", []) if document.get("id")}
+    except (OSError, json.JSONDecodeError, TypeError) as exc:
+        print(f"AVISO: não foi possível ler a compilação anterior: {exc}", file=sys.stderr)
+        return {}
+
+
 def main():
-    documents = []
+    previous = load_previous_documents()
+    documents, successful, reused, unavailable = [], [], [], []
     for key, spec in SOURCES.items():
         print(f'Compilando: {spec["title"]}', flush=True)
-        documents.append(build_document(key, spec))
+        try:
+            document = build_document(key, spec)
+            document.pop("stale", None)
+            document.pop("error", None)
+            successful.append(key)
+            print(f"  OK: {key}", flush=True)
+        except Exception as exc:
+            message = str(exc)[:1000]
+            if key in previous:
+                document = copy.deepcopy(previous[key])
+                document["stale"] = True
+                document["error"] = message
+                reused.append(key)
+                print(f"  REAPROVEITADO: {key} — {message}", file=sys.stderr, flush=True)
+            else:
+                unavailable.append((key, message))
+                print(f"  FALHOU SEM VERSÃO ANTERIOR: {key} — {message}", file=sys.stderr, flush=True)
+                continue
+        documents.append(document)
+    if unavailable:
+        details = "; ".join(f"{key}: {message}" for key, message in unavailable)
+        raise RuntimeError("Não foi possível compilar nem recuperar todas as fontes: " + details)
+    if not documents:
+        raise RuntimeError("Nenhum diploma foi compilado ou recuperado.")
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
-        "referenceDate": "2026-11-20",
+        "referenceDate": datetime.now(timezone.utc).date().isoformat(),
         "documents": documents,
-        "notice": "Transcrição compilada para estudo a partir das fontes oficiais indicadas. A consolidação automática descarta redações marcadas como revogadas em HTML quando identificadas como texto tachado; confira notas de alteração e a publicação oficial antes da prova."
+        "notice": "Transcrição compilada para estudo a partir das fontes indicadas. Textos tachados e dispositivos identificados como revogados são descartados intencionalmente; confira a publicação oficial, notas de alteração e vigência antes da prova."
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(
+        f"Resumo: {len(successful)} atualizados, {len(reused)} reaproveitados, "
+        f"{len(unavailable)} sem dados disponíveis.",
+        flush=True,
+    )
     print(f"Arquivo gerado: {OUT} ({OUT.stat().st_size} bytes)", flush=True)
+
 
 if __name__ == "__main__":
     try:

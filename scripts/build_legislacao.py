@@ -234,7 +234,7 @@ def clean_fragment(node):
 def legal_blocks(content):
     soup = parse_soup(content)
     root = soup.body or soup
-    candidates = root.find_all(["p", "h1", "h2", "h3", "h4", "h5", "h6"])
+    candidates = root.find_all(["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table"])
     blocks = []
     for node in candidates:
         text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()

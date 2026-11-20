@@ -133,7 +133,7 @@ SOURCES = {
         "title": "Normas de Serviço da Corregedoria Geral da Justiça — Tomo I (recortes do edital)",
         "url": "https://api.tjsp.jus.br/Handlers/Handler/FileFetch.ashx?codigo=203718",
         "kind": "pdf_ranges",
-        "ranges": [(5, 19), (26, 29), (46, 189), (1189, 1289)],
+        "ranges": [(5, 18), (26, 29), (46, 99), (103, 189), (1189, 1289)],
         "discipline": "Legislação Interna do TJSP",
         "minimum": 80,
         "updated": "PDF oficial atualizado em 22/10/2026; recortes por artigos correspondentes às seções indicadas no edital",

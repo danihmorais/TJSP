@@ -212,8 +212,35 @@ def html_lines(content):
 ALLOWED_TAGS = {
     "p", "div", "span", "strong", "b", "em", "i", "u", "sup", "sub",
     "a", "br", "ol", "ul", "li", "table", "thead", "tbody", "tr", "td",
-    "th", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote"
+    "th", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "font"
 }
+
+SAFE_STYLE_PROPERTIES = {
+    "font-family", "font-size", "font-weight", "font-style", "text-align",
+    "text-indent", "line-height", "margin", "margin-top", "margin-right",
+    "margin-bottom", "margin-left", "padding", "padding-top", "padding-right",
+    "padding-bottom", "padding-left", "text-transform", "color",
+    "background-color", "width", "max-width", "height", "vertical-align",
+    "border", "border-top", "border-bottom", "border-left", "border-right",
+    "border-collapse", "letter-spacing", "white-space"
+}
+
+def safe_inline_style(value):
+    declarations = []
+    for declaration in (value or "").split(";"):
+        if ":" not in declaration:
+            continue
+        name, content = declaration.split(":", 1)
+        name = name.strip().lower()
+        content = content.strip()
+        if name not in SAFE_STYLE_PROPERTIES or not content or len(content) > 160:
+            continue
+        if re.search(r"url\s*\(|expression|javascript:|@import|[<>]", content, re.IGNORECASE):
+            continue
+        if not re.fullmatch(r"[^;{}<>]{1,160}", content):
+            continue
+        declarations.append(f"{name}: {content}")
+    return "; ".join(declarations)
 
 def clean_fragment(node):
     fragment = BeautifulSoup(str(node), "html.parser")
@@ -222,12 +249,45 @@ def clean_fragment(node):
             element.unwrap()
             continue
         kept = {}
-        if element.name == "a" and element.get("href", "").startswith(("https://", "http://", "#")):
-            kept["href"] = element["href"]
+        if element.get("class"):
+            classes = [item for item in element.get("class", []) if re.fullmatch(r"[A-Za-z0-9_-]{1,48}", item)]
+            if classes:
+                kept["class"] = " ".join(classes)
+        if element.get("style"):
+            style = safe_inline_style(element.get("style"))
+            if style:
+                kept["style"] = style
+        if element.name == "a":
+            href = element.get("href", "")
+            if href.startswith(("https://", "http://", "#")):
+                kept["href"] = href
+            name = element.get("name", "")
+            if re.fullmatch(r"[A-Za-z0-9_:-]{1,100}", name):
+                kept["name"] = name
         if element.name in {"p", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6"}:
             align = element.get("align", "").lower()
             if align in {"left", "right", "center", "justify"}:
                 kept["align"] = align
+        if element.name == "font":
+            face = element.get("face", "")
+            size = element.get("size", "")
+            color = element.get("color", "")
+            if re.fullmatch(r"[A-Za-z0-9 ,_-]{1,60}", face):
+                kept["face"] = face
+            if re.fullmatch(r"[1-7][+-]?", size):
+                kept["size"] = size
+            if re.fullmatch(r"#[0-9A-Fa-f]{3,8}|[A-Za-z]{1,24}", color):
+                kept["color"] = color
+        if element.name == "table":
+            for attr in ("width", "border", "cellpadding", "cellspacing"):
+                value = element.get(attr, "")
+                if re.fullmatch(r"[0-9%]{1,5}", value):
+                    kept[attr] = value
+        if element.name in {"td", "th"}:
+            for attr in ("width", "colspan", "rowspan", "align", "valign"):
+                value = element.get(attr, "")
+                if re.fullmatch(r"[A-Za-z0-9%_-]{1,12}", value):
+                    kept[attr] = value
         element.attrs = kept
     return str(fragment)
 

@@ -17,11 +17,9 @@ A Lei nº 9.099/1995 é apresentada em dois recortes, dentro de suas disciplinas
 
 ## Leitura e impressão
 
-- Imprimir a apostila inteira.
-- Imprimir um agrupamento completo (por exemplo, apenas Direito Administrativo).
-- Imprimir um diploma individual (por exemplo, somente o Código Penal).
-- Pesquisar artigos, expressões e texto dos diplomas.
-- Preservar, quando a fonte é HTML, a marcação original de parágrafos, listas, links, destaques e notas. Em PDFs, recompõe-se a hierarquia de títulos e dispositivos para leitura.
+- Imprimir toda a apostila, os agrupamentos do edital ou um diploma individual.
+- Aplicar na impressão a tipografia do texto legal do Planalto (Arial 10 pt, entrelinha de 12 pt, alinhamento justificado, recuo de 38 px e margens de parágrafo de 20 px), preservando os atributos tipográficos originais presentes no HTML da fonte.
+- Preservar, quando a fonte é HTML, parágrafos, listas, links, destaques, atributos de fonte e espaçamentos originais. Em PDFs, recompõe-se a hierarquia dos dispositivos usando a mesma base tipográfica.
 
 ## Fontes e atualização
 

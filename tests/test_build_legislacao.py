@@ -44,6 +44,27 @@ class HtmlExtractionTests(unittest.TestCase):
         self.assertEqual([record["number"] for record in records], [25, 26])
         self.assertIn("bloco div", records[0]["body"])
 
+    def test_br_splits_only_at_structural_boundaries(self):
+        source = """
+        <html><body>
+        <p>TÍTULO I<br>Art. 25. Texto inicial<br>continuação do mesmo parágrafo.</p>
+        </body></html>
+        """
+        blocks = builder.legal_blocks(source, "br")
+        self.assertEqual(len(blocks), 2)
+        self.assertEqual(blocks[0]["text"], "TÍTULO I")
+        self.assertTrue(blocks[1]["isArticle"])
+        self.assertIn("continuação do mesmo parágrafo", blocks[1]["text"])
+        spec = {"title": "Teste", "minimum": 1, "ranges": [(25, 25)], "exact": []}
+        records = builder.extract_html_articles(spec, source, blocks)
+        self.assertTrue(records[0]["body"].startswith("Art. 25."))
+
+    def test_br_inside_paragraph_remains_a_space(self):
+        source = "<body><p>Art. 5º Texto inicial<br>continuação sem novo artigo.</p></body>"
+        blocks = builder.legal_blocks(source)
+        self.assertEqual(len(blocks), 1)
+        self.assertIn("Texto inicial continuação", blocks[0]["text"])
+
     def test_table_with_paragraph_is_emitted_once(self):
         source = "<html><body><table><tr><td><p>Texto único</p></td></tr></table></body></html>"
         blocks = builder.legal_blocks(source)

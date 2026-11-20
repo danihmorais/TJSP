@@ -6,6 +6,7 @@ import re
 import sys
 import urllib.request
 from collections import Counter
+from html import escape as html_escape
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -284,21 +285,72 @@ def clean_fragment(node):
         element.attrs = kept
     return str(fragment)
 
-def node_lines(node):
-    parts = []
-    for child in node.descendants:
-        if getattr(child, "name", None) == "br":
-            parts.append("\n")
-        elif isinstance(child, NavigableString):
-            parts.append(str(child))
-    raw = "".join(parts).replace("\xa0", " ").replace("\u200b", "")
-    result = []
-    for line in clean_lines(raw):
-        if result and not STRUCTURAL_LINE_RE.match(line):
-            result[-1] = (result[-1] + " " + line).strip()
+def tag_opening(node):
+    attributes = []
+    for name, value in node.attrs.items():
+        if isinstance(value, list):
+            value = " ".join(str(item) for item in value)
+        if value is None:
+            attributes.append(name)
         else:
-            result.append(line)
-    return result
+            attributes.append(f'{name}="{html_escape(str(value), quote=True)}"')
+    return "<" + node.name + (" " + " ".join(attributes) if attributes else "") + ">"
+
+
+def node_segments(node):
+    raw_segments = [{"text": [], "html": []}]
+    void_tags = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+
+    def walk(parent, stack):
+        for child in parent.children:
+            current = raw_segments[-1]
+            if isinstance(child, NavigableString):
+                value = str(child)
+                current["text"].append(value)
+                current["html"].append(html_escape(value, quote=False))
+                continue
+            if not getattr(child, "name", None):
+                continue
+            if child.name == "br":
+                for active in reversed(stack):
+                    raw_segments[-1]["html"].append(f"</{active.name}>")
+                raw_segments.append({"text": [], "html": []})
+                for active in stack:
+                    raw_segments[-1]["html"].append(tag_opening(active))
+                continue
+            if child.name in void_tags:
+                current["html"].append(str(child))
+                continue
+            current["text"].append(" ")
+            current["html"].append(tag_opening(child))
+            walk(child, stack + [child])
+            raw_segments[-1]["text"].append(" ")
+            raw_segments[-1]["html"].append(f"</{child.name}>")
+
+    walk(node, [])
+    merged = []
+    for raw in raw_segments:
+        text = re.sub(r"\\s+", " ", "".join(raw["text"])).strip()
+        markup = "".join(raw["html"])
+        if not text:
+            continue
+        if merged and not STRUCTURAL_LINE_RE.match(text):
+            merged[-1]["text"] = (merged[-1]["text"] + " " + text).strip()
+            merged[-1]["html"] += markup
+        else:
+            merged.append({"text": text, "html": markup})
+
+    if not merged:
+        return []
+    opening = tag_opening(node)
+    return [
+        {
+            "text": segment["text"],
+            "html": clean_fragment(opening + segment["html"] + f"</{node.name}>"),
+            "lines": [segment["text"]],
+        }
+        for segment in merged
+    ]
 
 
 def legal_blocks(content, doc_id="documento"):
@@ -316,30 +368,29 @@ def legal_blocks(content, doc_id="documento"):
         ]
         if node.find(descendants):
             continue
-        text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
-        if not text:
-            continue
-        html = clean_fragment(node)
-        fingerprint = (node.name, text, html)
-        if fingerprint in seen:
-            continue
-        seen.add(fingerprint)
-        lines = node_lines(node) or [text]
-        heading_match = STRUCTURAL_HEADING_RE.match(text)
-        heading_id = None
-        if heading_match:
-            heading_number += 1
-            heading_id = f"h-{doc_id}-{heading_number}"
-            html = f'<div id="{heading_id}" class="legal-heading-anchor">{html}</div>'
-        blocks.append({
-            "text": text,
-            "lines": lines,
-            "html": html,
-            "isArticle": bool(ARTICLE_RE.match(text)),
-            "isHeading": bool(heading_match),
-            "headingId": heading_id,
-        })
+        for segment in node_segments(node):
+            text = segment["text"]
+            html = segment["html"]
+            fingerprint = (node.name, text, html)
+            if fingerprint in seen:
+                continue
+            seen.add(fingerprint)
+            heading_match = STRUCTURAL_HEADING_RE.match(text)
+            heading_id = None
+            if heading_match:
+                heading_number += 1
+                heading_id = f"h-{doc_id}-{heading_number}"
+                html = f'<div id="{heading_id}" class="legal-heading-anchor">{html}</div>'
+            blocks.append({
+                "text": text,
+                "lines": segment["lines"],
+                "html": html,
+                "isArticle": bool(ARTICLE_RE.match(text)),
+                "isHeading": bool(heading_match),
+                "headingId": heading_id,
+            })
     return blocks
+
 
 
 def headings_from_blocks(blocks):

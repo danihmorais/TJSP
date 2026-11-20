@@ -103,6 +103,15 @@ SOURCES = {
         "minimum": 1,
         "updated": "Texto consolidado pela ALESP — última atualização indicada: LC nº 1.441/2026",
     },
+    "res963": {
+        "title": "Resolução TJSP nº 963/2025 — Governança e utilização do sistema eproc",
+        "url": "https://carreirapublica.com.br/legislacao/resolucao-tjsp-963-2025?concurso=tj-sp",
+        "official_url": "https://esaj.tjsp.jus.br/gcn-frontend-vue/legislacao/find/229313",
+        "kind": "html_block",
+        "discipline": "Legislação Interna do TJSP",
+        "minimum": 40,
+        "updated": "Compilação secundária de 19/10/2026; fonte primária oficial vinculada ao GCN/e-SAJ",
+    },
     "res850": {
         "title": "Resolução TJSP nº 850/2021 — Teletrabalho",
         "url": "https://api.tjsp.jus.br/handlers/handler/filefetch.ashx?codigo=122776",
@@ -245,6 +254,21 @@ def build_document(key, spec):
         if len(text) < 1000:
             raise RuntimeError(f'{spec["title"]}: extração de PDF vazia ou incompleta.')
         base["fullText"] = text
+    elif kind == "html_block":
+        lines = html_lines(raw)
+        start = next((i for i, line in enumerate(lines) if "preâmbulo" in line.lower()), None)
+        if start is None:
+            raise RuntimeError(f'{spec["title"]}: preâmbulo não localizado na página de compilação.')
+        end = next((i for i in range(start, len(lines)) if re.search(r"\bArt\.?\s*43\b", lines[i])), None)
+        if end is None:
+            raise RuntimeError(f'{spec["title"]}: artigo final 43 não localizado.')
+        text = "\n".join(lines[start:end + 1]).strip()
+        records = parse_articles(text)
+        if len(records) < spec.get("minimum", 1):
+            raise RuntimeError(f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}.')
+        base["fullText"] = text
+        base["articles"] = records
+        base["transcriptionNote"] = "Texto extraído de compilação secundária datada de 19/10/2026; fonte primária oficial do TJSP vinculada no GCN/e-SAJ."
     elif kind == "pdf_ranges":
         text = pdf_text(raw)
         records = parse_articles(text)
@@ -265,19 +289,6 @@ def main():
     for key, spec in SOURCES.items():
         print(f'Compilando: {spec["title"]}', flush=True)
         documents.append(build_document(key, spec))
-    # A Resolução 963/2025 é publicada integralmente no sistema GCN/e-SAJ,
-    # que entrega o inteiro teor por aplicação JavaScript e não por arquivo
-    # HTML/PDF estático. Mantém-se a fonte oficial direta, sem reconstrução
-    # aproximada nem substituição por resumo de terceiros.
-    documents.append({
-        "id": "res963",
-        "title": "Resolução TJSP nº 963/2025 — Governança e utilização do eproc",
-        "discipline": "Legislação Interna do TJSP",
-        "source": "https://esaj.tjsp.jus.br/gcn-frontend-vue/legislacao/find/229313",
-        "updated": "Inteiro teor oficial no sistema GCN/e-SAJ; referência ao Provimento CSM nº 2.834/2026",
-        "externalOnly": True,
-        "fullText": "O TJSP disponibiliza o inteiro teor compilado desta Resolução no sistema GCN/e-SAJ. Use o link da fonte oficial para abrir e imprimir o texto integral. O site não reproduz um texto reconstruído a partir de trechos indexados."
-    })
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "referenceDate": "2026-11-20",

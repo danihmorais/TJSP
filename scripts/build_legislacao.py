@@ -367,8 +367,16 @@ def extract_html_articles(spec, content, blocks=None):
             "html": html,
         })
     if len(records) < spec.get("minimum", 1):
+        detected = [
+            ARTICLE_RE.match(block["text"]).group(1)
+            for block in blocks
+            if ARTICLE_RE.match(block["text"])
+        ]
+        selected_numbers = [str(record["number"]) for record in records]
         raise RuntimeError(
-            f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}.'
+            f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}. '
+            f'Artigos selecionados: {", ".join(selected_numbers)}. '
+            f'Artigos detectados nos blocos: {", ".join(detected)}.'
         )
     return records
 

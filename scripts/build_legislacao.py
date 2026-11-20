@@ -177,7 +177,10 @@ def parse_articles(text):
         match = ARTICLE_RE.match(line)
         if match:
             if current:
-                current["body"] = "\n".join(current.pop("_lines")).strip()
+                body_lines = current.pop("_lines")
+                body_lines[0] = ARTICLE_RE.sub("", body_lines[0], count=1)
+                body_lines[0] = re.sub(r"^\s*[-–.:]\s*", "", body_lines[0])
+                current["body"] = "\n".join(body_lines).strip()
                 records.append(current)
             number = int(match.group(1))
             suffix = (match.group(2) or "").upper()
@@ -186,7 +189,10 @@ def parse_articles(text):
         elif current:
             current["_lines"].append(line)
     if current:
-        current["body"] = "\n".join(current.pop("_lines")).strip()
+        body_lines = current.pop("_lines")
+        body_lines[0] = ARTICLE_RE.sub("", body_lines[0], count=1)
+        body_lines[0] = re.sub(r"^\s*[-–.:]\s*", "", body_lines[0])
+        current["body"] = "\n".join(body_lines).strip()
         records.append(current)
     return records
 

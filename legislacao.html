@@ -90,7 +90,8 @@ function docHtml(d,i){
  } else {
    body='<div class="doc-body">'+(d.articles||[]).map(articleHtml).join("")+'</div>';
  }
- return '<section class="document" id="doc-'+esc(d.id)+'" data-doc="'+esc(d.id)+'">'+heading+body+'</section>';
+ const note=d.transcriptionNote?'<div class="doc-body"><div class="external">'+esc(d.transcriptionNote)+'</div></div>':"";
+ return '<section class="document" id="doc-'+esc(d.id)+'" data-doc="'+esc(d.id)+'">'+heading+note+body+'</section>';
 }
 function render(){
  $("#toc").innerHTML=docs.map((d,i)=>'<a class="toc-link" href="#doc-'+esc(d.id)+'">'+esc(d.title)+'</a>').join("");

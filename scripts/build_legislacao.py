@@ -235,7 +235,7 @@ def safe_inline_style(value):
         content = content.strip()
         if name not in SAFE_STYLE_PROPERTIES or not content or len(content) > 160:
             continue
-        if re.search(r"url\\s*\\(|expression|javascript:|@import|[<>]", content, re.IGNORECASE):
+        if re.search(r"url\s*\(|expression|javascript:|@import|[<>]", content, re.IGNORECASE):
             continue
         if not re.fullmatch(r"[^;{}<>]{1,160}", content):
             continue

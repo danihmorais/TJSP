@@ -114,7 +114,8 @@ SOURCES = {
     },
     "res850": {
         "title": "Resolução TJSP nº 850/2021 — Teletrabalho",
-        "url": "https://api.tjsp.jus.br/handlers/handler/filefetch.ashx?codigo=122776",
+        "url": "https://esaj.tjsp.jus.br/gcn-frontend-vue/legislacao/find/196070",
+        "download_url": "https://api.tjsp.jus.br/Handlers/Handler/FileFetch.ashx?codigo=122776",
         "kind": "pdf_full",
         "discipline": "Legislação Interna do TJSP",
         "minimum": 1,

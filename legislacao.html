@@ -95,6 +95,7 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
  body.print-mode.print-doc .document.print-target{display:block!important}
  body.print-mode.print-doc .group-header{display:none!important}
 }
+.transcription-note{margin:0 0 11px;padding:8px 10px;background:#fff7e9;border-left:3px solid #b88b49;color:#6b5431;font-size:10px}
 </style>
 </head>
 <body>
@@ -129,7 +130,7 @@ function docHtml(d,i){
  } else {
    body='<div class="doc-body">'+(d.articles||[]).map(articleHtml).join("")+'</div>';
  }
- const note=d.transcriptionNote?'<div class="doc-body"><div class="external">'+esc(d.transcriptionNote)+'</div></div>':"";
+ const note=d.transcriptionNote?'<div class="doc-body"><div class="transcription-note">'+esc(d.transcriptionNote)+'</div></div>':"";
  return '<section class="document" id="doc-'+esc(d.id)+'" data-doc="'+esc(d.id)+'">'+heading+note+body+'</section>';
 }
 function render(){
@@ -169,7 +170,7 @@ async function load(){
 }
 $("#search").addEventListener("input",applySearch);
 $("#clear").addEventListener("click",()=>{$("#search").value="";applySearch();});
-$("#print").addEventListener("click",()=>window.print());
+$("#print").addEventListener("click",()=>printSelection("all",""));
 load();
 </script>
 

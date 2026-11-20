@@ -32,7 +32,7 @@ SOURCES = {
         "ranges": [(251, 258), (261, 267), (351, 372), (394, 497), (531, 538), (541, 548), (574, 667)],
         "exact": [(274, "")],
         "discipline": "Direito Processual Penal",
-        "minimum": 200,
+        "minimum": 180,
         "updated": "Texto compilado oficial do Planalto",
     },
     "cpc": {

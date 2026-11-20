@@ -378,10 +378,36 @@ def extract_html_articles(spec, content, blocks=None):
             if ARTICLE_RE.match(block["text"])
         ]
         selected_numbers = [str(record["number"]) for record in records]
+        missing_nodes = []
+        if len(missing_nodes) < 40:
+            soup = parse_soup(content)
+            for node in soup.find_all(True):
+                node_text = re.sub(r"\\s+", " ", node.get_text(" ", strip=True)).strip()
+                match = ARTICLE_RE.match(node_text)
+                if not match:
+                    continue
+                number = int(match.group(1).replace(".", ""))
+                suffix = (match.group(2) or "").upper()
+                if str(number) in selected_numbers or not chosen({"number": number, "suffix": suffix}, spec):
+                    continue
+                child_match = any(
+                    (child_match := ARTICLE_RE.match(re.sub(r"\\s+", " ", child.get_text(" ", strip=True)).strip()))
+                    and int(child_match.group(1).replace(".", "")) == number
+                    for child in node.find_all(True)
+                )
+                if child_match:
+                    continue
+                parent = node.parent
+                parent_desc = parent.name if getattr(parent, "name", None) else "?"
+                classes = ".".join(node.get("class", [])) if node.get("class") else ""
+                missing_nodes.append(f"{number}:{node.name}.{classes}<{parent_desc}>")
+                if len(missing_nodes) >= 40:
+                    break
         raise RuntimeError(
             f'{spec["title"]}: extraídos {len(records)} artigos; mínimo esperado {spec.get("minimum")}. '
             f'Artigos selecionados: {", ".join(selected_numbers)}. '
-            f'Artigos detectados nos blocos: {", ".join(detected)}.'
+            f'Artigos detectados nos blocos: {", ".join(detected)}. '
+            f'Nós HTML não capturados: {", ".join(missing_nodes)}.'
         )
     return records
 

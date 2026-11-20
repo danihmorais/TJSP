@@ -88,8 +88,9 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
  .article{border:0;margin:0 0 3.5mm;padding:0;break-inside:avoid}
  .legal-source,.full-text{font:10.5pt/1.4 Arial,Helvetica,sans-serif}
  .legal-source p{margin:.25em 0 .45em}
- body.print-mode .subject,body.print-mode .document{display:none!important}
+ body.print-mode .group-section{display:none!important}
  body.print-mode .group-section.print-target{display:block!important}
+ body.print-mode .group-section.print-target .document{display:block!important}
  body.print-mode.print-doc .group-section.print-target .document{display:none!important}
  body.print-mode.print-doc .document.print-target{display:block!important}
  body.print-mode.print-doc .group-header{display:none!important}
@@ -252,8 +253,6 @@ document.querySelector("#documents").addEventListener("click",event=>{
  const btn=event.target.closest("[data-print]");if(btn)printSelection(btn.dataset.print,btn.dataset.target);
 });
 window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));});
-const allButton=document.querySelector("#print");
-if(allButton)allButton.addEventListener("click",()=>printSelection("all",""));
 </script>
 
 </body>

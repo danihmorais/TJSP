@@ -1,4 +1,5 @@
 import functools
+import io
 import json
 import tempfile
 import threading
@@ -91,7 +92,7 @@ class LegislationBrowserTests(unittest.TestCase):
         cls.thread.join(timeout=5)
         cls.tempdir.cleanup()
 
-    def read_pdf(self, browser, page, mode, button, target_texts, excluded_texts=()):
+    def read_pdf(self, page, mode, button, target_texts, excluded_texts=()):
         page.emulate_media(media="screen")
         page.evaluate("resetPrintState()")
         page.locator(button).click()
@@ -99,8 +100,8 @@ class LegislationBrowserTests(unittest.TestCase):
             "document.body.classList.contains('print-all') || document.body.classList.contains('print-mode')"
         )
         page.emulate_media(media="print")
-        pdf = browser.new_page().pdf(prefer_css_page_size=True, print_background=True)
-        reader = PdfReader(__import__("io").BytesIO(pdf))
+        pdf = page.pdf(prefer_css_page_size=True, print_background=True)
+        reader = PdfReader(io.BytesIO(pdf))
         texts = [(item.extract_text() or "").strip() for item in reader.pages]
         self.assertGreaterEqual(len(texts), 2)
         self.assertIn("SUMÁRIO", texts[0])
@@ -137,7 +138,7 @@ class LegislationBrowserTests(unittest.TestCase):
             self.assertTrue(page.locator("#doc-cpp").is_visible())
 
             all_texts = self.read_pdf(
-                browser,
+
                 page,
                 "all",
                 "#print-all",
@@ -152,7 +153,7 @@ class LegislationBrowserTests(unittest.TestCase):
             self.assertNotEqual(title_pages["Código Penal"], title_pages["Código de Processo Penal"])
 
             group_texts = self.read_pdf(
-                browser,
+
                 page,
                 "group",
                 '[data-print="group"][data-target="penal"]',
@@ -162,7 +163,7 @@ class LegislationBrowserTests(unittest.TestCase):
             self.assertIn("Código Penal", group_texts[0])
 
             document_texts = self.read_pdf(
-                browser,
+
                 page,
                 "document",
                 '[data-print="doc"][data-target="cp"]',

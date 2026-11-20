@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#10243a">
 <meta name="description" content="Texto integral compilado dos dispositivos legais do Bloco II do edital do TJSP, organizado para leitura e impressão.">
 <title>Legislação compilada — Bloco II | TJSP</title>
+<link rel="stylesheet" href="https://www.planalto.gov.br/ccivil_03/css/header.css" media="print">
+<link rel="stylesheet" href="https://www.planalto.gov.br/ccivil_03/css/font.css" media="print">
 <style>
 :root{--navy:#10243a;--ink:#202b35;--muted:#667585;--line:#d9e0e6;--canvas:#f1f4f6;--blue:#225a80;--gold:#b88a47;--paper:#fff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -96,15 +98,51 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
  body.print-mode.print-doc .group-header{display:none!important}
 }
 .transcription-note{margin:0 0 11px;padding:8px 10px;background:#fff7e9;border-left:3px solid #b88b49;color:#6b5431;font-size:10px}
-</style>
+
+/* Impressão baseada na tipografia e na composição do texto legal do Planalto. */
+@page{size:A4;margin:15mm 10mm 15mm 20mm}
+@media print{
+ body{background:#fff!important;color:#000!important;font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:justify}
+ body>header{display:none!important}
+ .group-header{display:none!important}
+ .doc-head{background:#fff!important;border:0!important;padding:0 0 3mm!important;break-after:avoid!important}
+ .doc-title-row{display:block!important}
+ .doc-title-row h2,.doc-head h2{font:700 10pt/12pt Arial,Helvetica,sans-serif!important;text-align:center!important;text-transform:uppercase!important;letter-spacing:0!important;margin:0 0 20px!important;color:#000!important}
+ .doc-meta{display:none!important}
+ .doc-body{padding:0!important}
+ .legal-source,.full-text,.article-text{font:10pt/12pt Arial,Helvetica,sans-serif!important;text-align:justify}
+ .legal-source p{font:10pt/12pt Arial,Helvetica,sans-serif;text-align:justify;text-indent:38px;margin:20px 0;white-space:normal}
+ .legal-source p[align=center],.legal-source p[align=CENTER]{text-align:center;text-indent:0}
+ .legal-source p[align=left],.legal-source p[align=LEFT]{text-align:left}
+ .legal-source p[align=right],.legal-source p[align=RIGHT]{text-align:right}
+ .legal-source h1,.legal-source h2,.legal-source h3,.legal-source h4,.legal-source h5,.legal-source h6{font:10pt/12pt Arial,Helvetica,sans-serif;text-align:center;text-transform:uppercase;text-indent:0;margin:20px 0}
+ .legal-source ol,.legal-source ul{font:10pt/12pt Arial,Helvetica,sans-serif;margin:20px 0;padding-left:38px}
+ .legal-source li{font:10pt/12pt Arial,Helvetica,sans-serif;margin:0 0 6px;text-align:justify}
+ .legal-source table{font:10pt/12pt Arial,Helvetica,sans-serif;border-collapse:collapse}
+ .legal-line{font:10pt/12pt Arial,Helvetica,sans-serif;text-align:justify;text-indent:38px;margin:20px 0;padding:0;white-space:normal}
+ .legal-line.heading{font-weight:400;text-align:center;text-indent:0;text-transform:uppercase;margin:20px 0}
+ .legal-line.article-line{font-weight:400;margin-top:20px}
+ .legal-line.paragraph,.legal-line.subitem,.legal-line.alinea{padding-left:0;text-indent:38px}
+ .group-section{break-before:page;margin:0}
+ .group-section:first-child{break-before:auto}
+ .document{break-before:page;margin:0!important;border:0!important;overflow:visible!important}
+ .group-section .document:first-of-type{break-before:auto}
+ body.print-all .group-section,body.print-all .group-section .document{display:block!important}
+ body.print-mode .group-section{display:none!important}
+ body.print-mode .group-section.print-target{display:block!important;break-before:auto!important}
+ body.print-mode .group-section.print-target .document{display:block!important}
+ body.print-mode .group-section.print-target .document:first-of-type{break-before:auto!important}
+ body.print-mode .document.print-target{display:block!important;break-before:auto!important}
+ body.print-mode.print-doc .group-section.print-target .document:not(.print-target){display:none!important}
+}
 </head>
 <body>
-<header><div class="head"><div class="brand"><small>Tribunal de Justiça do Estado de São Paulo • Concurso</small><h1>Bloco II — Legislação compilada</h1></div><div class="actions"><a class="primary" href="index.html">Voltar aos resumos</a><button id="print">Imprimir / salvar PDF</button></div></div></header>
+<header><div class="head"><div class="brand"><small>Tribunal de Justiça do Estado de São Paulo • Concurso</small><h1>Bloco II — Legislação compilada</h1></div><div class="actions"><a class="primary" href="index.html">Voltar aos resumos</a><button id="print" disabled>Imprimir TUDO</button></div></div></header>
 <div class="shell">
 <aside><p class="side-title">Sumário dos diplomas</p><nav id="toc" aria-label="Sumário"></nav><div class="aside-foot">Texto legal em sequência, com recorte limitado aos dispositivos do edital. Use a busca para localizar artigo ou expressão.</div></aside>
 <main>
 <section class="intro"><div class="kicker">Apostila de leitura e impressão</div><h2>Texto dos dispositivos previstos no edital</h2><p>Esta página prioriza a legislação, não os resumos. Os dispositivos aparecem em sequência, agrupados por diploma e na ordem do programa. A busca filtra artigos por número e conteúdo; a impressão gera uma apostila em formato A4. Os textos são extraídos das fontes oficiais indicadas em cada diploma.</p></section>
-<div class="tools"><input id="search" class="search" type="search" placeholder="Buscar artigo, palavra ou expressão..." aria-label="Buscar na legislação"><button id="clear" class="tool-btn">Limpar busca</button><span id="count" class="count" aria-live="polite">Carregando legislação…</span></div>
+<div class="tools"><input id="search" class="search" type="search" placeholder="Buscar artigo, palavra ou expressão..." aria-label="Buscar na legislação"><button id="clear" class="tool-btn">Limpar busca</button><button id="print-all" class="tool-btn print-all" type="button" disabled>Imprimir tudo — apostila completa</button><span id="count" class="count" aria-live="polite">Carregando legislação…</span></div>
 <div id="status" class="status">Carregando textos oficiais compilados…</div>
 <div id="documents"></div>
 </main>
@@ -162,7 +200,7 @@ async function load(){
   if(!response.ok)throw new Error("Arquivo da legislação ainda não foi gerado ("+response.status+").");
   const data=await response.json();docs=data.documents||[];
   if(!docs.length)throw new Error("O arquivo foi carregado, mas não contém diplomas.");
-  render();$("#status").hidden=true;
+  render();$("#status").hidden=true;$("#print").disabled=false;$("#print-all").disabled=false;
  }catch(error){
   $("#status").innerHTML="<strong>Não foi possível carregar a apostila.</strong><br>"+esc(error.message)+"<br>O gerador automático do repositório precisa concluir a compilação antes da publicação.";
   $("#count").textContent="Conteúdo indisponível";
@@ -171,6 +209,7 @@ async function load(){
 $("#search").addEventListener("input",applySearch);
 $("#clear").addEventListener("click",()=>{$("#search").value="";applySearch();});
 $("#print").addEventListener("click",()=>printSelection("all",""));
+$("#print-all").addEventListener("click",()=>printSelection("all",""));
 load();
 </script>
 
@@ -238,9 +277,9 @@ applySearch=function(){
 let lastPrintSearch=null;
 function printSelection(type,id){
  lastPrintSearch=$("#search").value;$("#search").value="";applySearch();
- document.body.classList.remove("print-mode","print-doc");
+ document.body.classList.remove("print-mode","print-doc","print-all");
  document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));
- if(type==="all"){window.print();return;}
+ if(type==="all"){document.body.classList.add("print-all");requestAnimationFrame(()=>window.print());return;}
  document.body.classList.add("print-mode");
  if(type==="group"){
   const group=document.querySelector('.group-section[data-group="'+CSS.escape(id)+'"]');
@@ -255,7 +294,7 @@ function printSelection(type,id){
 document.querySelector("#documents").addEventListener("click",event=>{
  const btn=event.target.closest("[data-print]");if(btn)printSelection(btn.dataset.print,btn.dataset.target);
 });
-window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));if(lastPrintSearch!==null){$("#search").value=lastPrintSearch;lastPrintSearch=null;applySearch();}});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("print-mode","print-doc","print-all");document.querySelectorAll(".print-target").forEach(el=>el.classList.remove("print-target"));if(lastPrintSearch!==null){$("#search").value=lastPrintSearch;lastPrintSearch=null;applySearch();}});
 </script>
 
 </body>

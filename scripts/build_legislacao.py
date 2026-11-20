@@ -373,9 +373,9 @@ def build_document(key, spec):
         base["articles"] = records
         blocks = legal_blocks(raw)
         context_start = next((i for i, block in enumerate(blocks) if "preâmbulo" in block["text"].lower()), None)
-        context_end = next((i for i in range(context_start or 0, len(blocks)) if re.search(r"\\bArt\\.?\\s*43\\b", blocks[i]["text"])), None)
+        context_end = next((i for i in range(context_start or 0, len(blocks)) if re.search(r"\bArt\.?\s*43\b", blocks[i]["text"])), None)
         if context_start is not None and context_end is not None:
-            base["fullHtml"] = "\\n".join(block["html"] for block in blocks[context_start:context_end + 1])
+            base["fullHtml"] = "\n".join(block["html"] for block in blocks[context_start:context_end + 1])
         base["transcriptionNote"] = "Texto extraído de compilação secundária datada de 19/10/2026; fonte primária oficial do TJSP vinculada no GCN/e-SAJ."
     elif kind == "pdf_ranges":
         text = pdf_text(raw)

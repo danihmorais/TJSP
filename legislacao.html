@@ -59,7 +59,7 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
 </style>
 </head>
 <body>
-<header><div class="head"><div class="brand"><small>Tribunal de Justiça do Estado de São Paulo • Concurso</small><h1>Bloco II — Legislação compilada</h1></div><div class="actions"><a class="primary" href="index.html">Voltar aos resumos</a><button id="print">Imprimir / salvar PDF</button><button id="expand">Expandir textos</button></div></div></header>
+<header><div class="head"><div class="brand"><small>Tribunal de Justiça do Estado de São Paulo • Concurso</small><h1>Bloco II — Legislação compilada</h1></div><div class="actions"><a class="primary" href="index.html">Voltar aos resumos</a><button id="print">Imprimir / salvar PDF</button></div></div></header>
 <div class="shell">
 <aside><p class="side-title">Sumário dos diplomas</p><nav id="toc" aria-label="Sumário"></nav><div class="aside-foot">Texto legal em sequência, com recorte limitado aos dispositivos do edital. Use a busca para localizar artigo ou expressão.</div></aside>
 <main>
@@ -72,7 +72,7 @@ footer{max-width:1500px;margin:0 auto;padding:0 18px 25px;font-size:11px;color:#
 <footer>Material compilado para leitura e estudo com base nas fontes oficiais vinculadas. Confira o texto oficial, alterações posteriores, notas de vigência e eventuais retificações antes da prova. A Resolução TJSP nº 963/2025 é disponibilizada pelo sistema GCN/e-SAJ, por isso sua consulta integral abre a página oficial.</footer>
 <script>
 const $=s=>document.querySelector(s);
-let docs=[],expanded=true;
+let docs=[];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm=s=>String(s??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 function articleHtml(a){
@@ -130,7 +130,6 @@ async function load(){
 $("#search").addEventListener("input",applySearch);
 $("#clear").addEventListener("click",()=>{$("#search").value="";applySearch();});
 $("#print").addEventListener("click",()=>window.print());
-$("#expand").addEventListener("click",()=>{expanded=!expanded;document.querySelectorAll(".document").forEach(x=>x.hidden=!expanded);$("#expand").textContent=expanded?"Recolher textos":"Expandir textos";});
 load();
 </script>
 </body>

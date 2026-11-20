@@ -3,7 +3,7 @@ name: Build and deploy GitHub Pages
 on:
   push:
     branches:
-      - main
+      - '**'
   pull_request:
     branches:
       - main
@@ -56,7 +56,7 @@ jobs:
           path: .
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     environment:
       name: github-pages

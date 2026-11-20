@@ -225,7 +225,7 @@ def safe_inline_style(value):
             continue
         name, content = declaration.split(":", 1)
         name = name.strip().lower()
-        content = content.strip()
+        content = re.sub(r"\\s*!important\\s*$", "", content, flags=re.IGNORECASE).strip()
         if name not in SAFE_STYLE_PROPERTIES or not content or len(content) > 160:
             continue
         if re.search(r"url\s*\(|expression|javascript:|@import|[<>]", content, re.IGNORECASE):

@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: write
   pages: write
   id-token: write
@@ -30,9 +31,11 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - name: Install extraction libraries
-        run: python -m pip install --disable-pip-version-check beautifulsoup4 pypdf
-      - name: Test legislation extraction
+      - name: Install extraction and browser libraries
+        run: python -m pip install --disable-pip-version-check beautifulsoup4 pypdf playwright
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Test extraction, page rendering and print output
         run: python -m unittest discover -s tests -v
       - name: Compile the legislation from official sources
         run: python scripts/build_legislacao.py

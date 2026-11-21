@@ -464,8 +464,7 @@ def extract_html_articles(spec, content, blocks=None):
                 parent = node.parent
                 parent_desc = parent.name if getattr(parent, "name", None) else "?"
                 classes = ".".join(node.get("class", [])) if node.get("class") else ""
-                snippet = re.sub(r"\s+", " ", str(node)).strip()[:1400]
-                missing_nodes.append(f"{number}:{node.name}.{classes}<{parent_desc}> HTML={snippet}")
+                missing_nodes.append(f"{number}:{node.name}.{classes}<{parent_desc}>")
                 if len(missing_nodes) >= 40:
                     break
         raise RuntimeError(

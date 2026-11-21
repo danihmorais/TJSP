@@ -226,7 +226,7 @@ def safe_inline_style(value):
             continue
         name, content = declaration.split(":", 1)
         name = name.strip().lower()
-        content = re.sub(r"\\s*!important\\s*$", "", content, flags=re.IGNORECASE).strip()
+        content = re.sub(r"\s*!important\\s*$", "", content, flags=re.IGNORECASE).strip()
         if name not in SAFE_STYLE_PROPERTIES or not content or len(content) > 160:
             continue
         if re.search(r"url\s*\(|expression|javascript:|@import|[<>]", content, re.IGNORECASE):
@@ -330,7 +330,7 @@ def node_segments(node):
     walk(node, [])
     merged = []
     for raw in raw_segments:
-        text = re.sub(r"\\s+", " ", "".join(raw["text"])).strip()
+        text = re.sub(r"\s+", " ", "".join(raw["text"])).strip()
         markup = "".join(raw["html"])
         if not text:
             continue
@@ -368,12 +368,12 @@ def legal_blocks(content, doc_id="documento"):
         ]
         nested_blocks = node.find(descendants)
         if nested_blocks:
-            if not ARTICLE_RE.match(re.sub(r"\\s+", " ", node.get_text(" ", strip=True)).strip()):
+            if not ARTICLE_RE.match(re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()):
                 continue
             lead = copy.copy(node)
             for nested in lead.find_all(descendants):
                 nested.decompose()
-            if not ARTICLE_RE.match(re.sub(r"\\s+", " ", lead.get_text(" ", strip=True)).strip()):
+            if not ARTICLE_RE.match(re.sub(r"\s+", " ", lead.get_text(" ", strip=True)).strip()):
                 continue
             source_node = lead
         else:
@@ -443,7 +443,7 @@ def extract_html_articles(spec, content, blocks=None):
         if len(missing_nodes) < 40:
             soup = parse_soup(content)
             for node in soup.find_all(True):
-                node_text = re.sub(r"\\s+", " ", node.get_text(" ", strip=True)).strip()
+                node_text = re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()
                 match = ARTICLE_RE.match(node_text)
                 if not match:
                     continue
@@ -454,7 +454,7 @@ def extract_html_articles(spec, content, blocks=None):
                 child_has_match = False
                 for child in node.find_all(True):
                     descendant_match = ARTICLE_RE.match(
-                        re.sub(r"\\s+", " ", child.get_text(" ", strip=True)).strip()
+                        re.sub(r"\s+", " ", child.get_text(" ", strip=True)).strip()
                     )
                     if descendant_match and int(descendant_match.group(1).replace(".", "")) == number:
                         child_has_match = True

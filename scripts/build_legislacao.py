@@ -226,7 +226,7 @@ def safe_inline_style(value):
             continue
         name, content = declaration.split(":", 1)
         name = name.strip().lower()
-        content = re.sub(r"\s*!important\\s*$", "", content, flags=re.IGNORECASE).strip()
+        content = re.sub(r"\s*!important\s*$", "", content, flags=re.IGNORECASE).strip()
         if name not in SAFE_STYLE_PROPERTIES or not content or len(content) > 160:
             continue
         if re.search(r"url\s*\(|expression|javascript:|@import|[<>]", content, re.IGNORECASE):
@@ -464,7 +464,7 @@ def extract_html_articles(spec, content, blocks=None):
                 parent = node.parent
                 parent_desc = parent.name if getattr(parent, "name", None) else "?"
                 classes = ".".join(node.get("class", [])) if node.get("class") else ""
-                snippet = re.sub(r"\\s+", " ", str(node)).strip()[:1400]
+                snippet = re.sub(r"\s+", " ", str(node)).strip()[:1400]
                 missing_nodes.append(f"{number}:{node.name}.{classes}<{parent_desc}> HTML={snippet}")
                 if len(missing_nodes) >= 40:
                     break

@@ -14,6 +14,10 @@ SPEC.loader.exec_module(builder)
 
 
 class HtmlExtractionTests(unittest.TestCase):
+    def test_inline_important_is_removed_from_source_styles(self):
+        value = builder.safe_inline_style("font-family: Arial !important; margin: 20px 0 !important")
+        self.assertEqual(value, "font-family: Arial; margin: 20px 0")
+
     def test_inline_tags_do_not_split_paragraph_or_create_false_article(self):
         source = """
         <html><body>

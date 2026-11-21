@@ -65,6 +65,23 @@ class HtmlExtractionTests(unittest.TestCase):
         self.assertEqual(len(blocks), 1)
         self.assertIn("Texto inicial continuação", blocks[0]["text"])
 
+    def test_nested_blocks_keep_only_parent_article_prefix(self):
+        source = """
+        <html><body>
+        <p>Art. 37. Texto introdutório do artigo.
+          <p>§ 1º Primeiro parágrafo interno.</p>
+          <p>§ 2º Segundo parágrafo interno.</p>
+        </p>
+        </body></html>
+        """
+        spec = {"title": "Teste", "minimum": 1, "ranges": [(37, 37)], "exact": []}
+        blocks = builder.legal_blocks(source, "nested")
+        records = builder.extract_html_articles(spec, source, blocks)
+        self.assertEqual(len(records), 1)
+        self.assertTrue(records[0]["body"].startswith("Art. 37."))
+        self.assertIn("§ 1º Primeiro parágrafo interno.", records[0]["body"])
+        self.assertIn("§ 2º Segundo parágrafo interno.", records[0]["body"])
+
     def test_table_with_paragraph_is_emitted_once(self):
         source = "<html><body><table><tr><td><p>Texto único</p></td></tr></table></body></html>"
         blocks = builder.legal_blocks(source)

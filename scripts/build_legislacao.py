@@ -366,9 +366,19 @@ def legal_blocks(content, doc_id="documento"):
         descendants = tags if node.name != "table" else [
             "p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "table"
         ]
-        if node.find(descendants):
-            continue
-        for segment in node_segments(node):
+        nested_blocks = node.find(descendants)
+        if nested_blocks:
+            if not ARTICLE_RE.match(re.sub(r"\\s+", " ", node.get_text(" ", strip=True)).strip()):
+                continue
+            lead = copy.copy(node)
+            for nested in lead.find_all(descendants):
+                nested.decompose()
+            if not ARTICLE_RE.match(re.sub(r"\\s+", " ", lead.get_text(" ", strip=True)).strip()):
+                continue
+            source_node = lead
+        else:
+            source_node = node
+        for segment in node_segments(source_node):
             text = segment["text"]
             html = segment["html"]
             fingerprint = (node.name, text, html)

@@ -82,6 +82,32 @@ class HtmlExtractionTests(unittest.TestCase):
         self.assertIn("§ 1º Primeiro parágrafo interno.", records[0]["body"])
         self.assertIn("§ 2º Segundo parágrafo interno.", records[0]["body"])
 
+    def test_parent_block_does_not_delete_nested_article_content(self):
+        source = """
+        <html><body>
+        <div>Art. 37. Texto introdutório.
+          <p>§ 1º Primeiro parágrafo interno.</p>
+        </div>
+        </body></html>
+        """
+        blocks = builder.legal_blocks(source, "parent")
+        self.assertTrue(any(block["text"].startswith("Art. 37.") for block in blocks))
+        self.assertTrue(any(block["text"].startswith("§ 1º") for block in blocks))
+        spec = {"title": "Teste", "minimum": 1, "ranges": [(37, 37)], "exact": []}
+        records = builder.extract_html_articles(spec, source, blocks)
+        self.assertIn("§ 1º Primeiro parágrafo interno.", records[0]["body"])
+
+    def test_fallback_normalization_restores_article_prefix(self):
+        document = {
+            "articles": [
+                {"number": 5, "suffix": "", "label": "Art. 5", "body": "Texto do artigo."},
+                {"number": 311, "suffix": "A", "label": "Art. 311-A", "body": "Outro texto."},
+            ]
+        }
+        normalized = builder.normalize_fallback_document(document)
+        self.assertEqual(normalized["articles"][0]["body"], "Art. 5º Texto do artigo.")
+        self.assertEqual(normalized["articles"][1]["body"], "Art. 311-A Outro texto.")
+
     def test_table_with_paragraph_is_emitted_once(self):
         source = "<html><body><table><tr><td><p>Texto único</p></td></tr></table></body></html>"
         blocks = builder.legal_blocks(source)

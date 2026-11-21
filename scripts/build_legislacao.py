@@ -370,7 +370,7 @@ def legal_blocks(content, doc_id="documento"):
         if nested_blocks:
             if not ARTICLE_RE.match(re.sub(r"\s+", " ", node.get_text(" ", strip=True)).strip()):
                 continue
-            lead = copy.copy(node)
+            lead = copy.deepcopy(node)
             for nested in lead.find_all(descendants):
                 nested.decompose()
             if not ARTICLE_RE.match(re.sub(r"\s+", " ", lead.get_text(" ", strip=True)).strip()):
@@ -646,7 +646,7 @@ def load_previous_documents():
 def normalize_fallback_document(document):
     for article in document.get("articles", []):
         body = (article.get("body") or "").lstrip()
-        if re.match(r"^Art(?:igo)?\\.?\\s*\\d", body, re.IGNORECASE):
+        if re.match(r"^Art(?:igo)?\.?\s*\d", body, re.IGNORECASE):
             continue
         number = article.get("number")
         suffix = (article.get("suffix") or "").upper()
@@ -655,7 +655,7 @@ def normalize_fallback_document(document):
         label = f"Art. {number}" + (f"-{suffix}" if suffix else "")
         prefix = label + ("" if suffix else "º")
         article["body"] = (prefix + " " + body).strip()
-        if article.get("html") and not re.search(r"Art(?:igo)?\\.?\\s*\\d", article["html"], re.IGNORECASE):
+        if article.get("html") and not re.search(r"Art(?:igo)?\.?\s*\d", article["html"], re.IGNORECASE):
             article["html"] = f'<p class="legal-line article-line">{html_escape(prefix)}</p>' + article["html"]
         article.setdefault("label", label)
     return document

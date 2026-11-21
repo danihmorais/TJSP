@@ -643,6 +643,24 @@ def load_previous_documents():
         return {}
 
 
+def normalize_fallback_document(document):
+    for article in document.get("articles", []):
+        body = (article.get("body") or "").lstrip()
+        if re.match(r"^Art(?:igo)?\\.?\\s*\\d", body, re.IGNORECASE):
+            continue
+        number = article.get("number")
+        suffix = (article.get("suffix") or "").upper()
+        if number is None:
+            continue
+        label = f"Art. {number}" + (f"-{suffix}" if suffix else "")
+        prefix = label + ("" if suffix else "º")
+        article["body"] = (prefix + " " + body).strip()
+        if article.get("html") and not re.search(r"Art(?:igo)?\\.?\\s*\\d", article["html"], re.IGNORECASE):
+            article["html"] = f'<p class="legal-line article-line">{html_escape(prefix)}</p>' + article["html"]
+        article.setdefault("label", label)
+    return document
+
+
 def main():
     previous = load_previous_documents()
     documents, successful, reused, unavailable = [], [], [], []
@@ -657,7 +675,7 @@ def main():
         except Exception as exc:
             message = str(exc)[:1000]
             if key in previous:
-                document = copy.deepcopy(previous[key])
+                document = normalize_fallback_document(copy.deepcopy(previous[key]))
                 document["stale"] = True
                 document["error"] = message
                 reused.append(key)

@@ -37,6 +37,16 @@ jobs:
         run: python -m playwright install --with-deps chromium
       - name: Test extraction, page rendering and print output
         run: python -m unittest discover -s tests -v
+      - name: Restore the previous compiled snapshot when missing
+        if: ${{ !hashFiles('data/legislacao.json') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/tjsp-pages
+          gh run download 44838830450 --repo "$GITHUB_REPOSITORY" --name github-pages --dir /tmp/tjsp-pages
+          tar -xf /tmp/tjsp-pages/artifact.tar -C /tmp/tjsp-pages
+          mkdir -p data
+          cp /tmp/tjsp-pages/data/legislacao.json data/legislacao.json
       - name: Compile the legislation from official sources
         run: python scripts/build_legislacao.py
       - name: Persist the compiled JSON fallback
